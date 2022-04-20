@@ -5,14 +5,14 @@ let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de cr
 iniciarApp()
 function iniciarApp(){
     if (seusQuizzes.length === 0){
-        document.querySelector(".conteudo").innerHTML = `
+        document.querySelector(".conteudo").innerHTML += `
             <div class="criarQuizz">
                 <div class="infoSemQuizz">Você não criou nenhum quizz ainda :(</div>
                 <button type="button">Criar Quizz</button> 
             </div>
         `
     } else{
-        document.querySelector(".conteudo").innerHTML = `
+        document.querySelector(".conteudo").innerHTML += `
             <section class="seusQuizzes">
                 <div class="seusQuizzesHeader">
                     <h2>Seus Quizzes</h2>
@@ -24,5 +24,7 @@ function iniciarApp(){
 }
 
 function criarQuizz(){
-    
+    const tela3 = document.querySelector(".telaCriacaoQuizz");
+    console.log(tela3);
+    tela3.classList.remove("escondido");
 }
