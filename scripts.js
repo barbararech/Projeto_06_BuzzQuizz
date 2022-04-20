@@ -24,5 +24,5 @@ function iniciarApp(){
 }
 
 function criarQuizz(){
-
+    
 }
