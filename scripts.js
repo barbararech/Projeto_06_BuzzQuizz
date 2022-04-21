@@ -2,6 +2,7 @@
 //Variáveis Globais
 let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const tela1 = document.querySelector(".telaListaQuizzes");
+const tela2 = document.querySelector(".telaInfoQuiz");
 const tela3 = document.querySelector(".telaCriarQuizz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 
@@ -31,18 +32,92 @@ function iniciarApp(){
 function criarQuizz(){
     // Criei um botao só pra testar - Arrumar
     document.querySelector(".telaCriarQuizz").innerHTML += `
-        <button onclick="criarPerguntas()">clica</button>
+        <button onclick="abrirTelaInfo()">clica</button>
         `
     tela1.classList.add("escondido");
     tela3.classList.remove("escondido");
 }
 
+//InnerHTML da Tela de Info
+
+function abrirTelaInfo(){
+    document.querySelector(".telaInfoQuiz").innerHTML =`
+        <div class="conteiner_info">
+            <h2>Começando pelo começo</h2>
+            <div class="caixa_info">
+                <input type="text" class="titulo"  placeholder="Título do Seu Quizz">
+                <input type="url" class="url_Img"   placeholder="URL da imagem do seu Quizz">
+                <input type="number" class="qnt_perguntas" placeholder="Quantidade de perguntas do seu Quizz">
+                <input type="number" class="qnt_niveis"  placeholder="Quantidade de níveis do seu Quiz">
+            </div>
+            <button onclick="insertInfoQuizz()"><h4>Prosseguir pra criar perguntas</h4></button>
+        </div>
+    `;
+    tela3.classList.add("escondido");
+    tela2.classList.remove("escondido");
+}
+
+//Função de inserir as Infos do Quizz
+
+let informacoes= {};
+function insertInfoQuizz(){
+    const titulo=document.querySelector("input.titulo").value
+    const imgQuizz=document.querySelector("input.url_Img").value;
+    const qntPergunta=document.querySelector("input.qnt_perguntas").value;
+    const qntNiveis=document.querySelector("input.qnt_niveis").value;
+
+    if(!validacaoInfos(titulo,imgQuizz,qntPergunta, qntNiveis)){
+        alert("Por favor, preencha corretamente.")
+        return
+    }
+
+    informacoes.titulo=titulo;
+    informacoes.imagem=imgQuizz;
+    informacoes.perguntas=qntPergunta;
+    informacoes.niveis=qntNiveis;
+
+    criarPerguntas()
+    limparInput();
+}
+
+//Validação de Infos
+function  validacaoInfos(title,url,numPergunta,NumNivel){
+let re = RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/)|(magnet:\?xt=urn:btih:))")
+if(title.length> 65 || title.length<20){
+    alert("O título deve ter entre 20 e 65 letras!")
+    return false
+}
+if(!re.test(url)){
+    alert(`A imagem deve ser inserida como URL (Formato: https://www.exemplo.com)!`)
+    return false
+}
+if(numPergunta<3){
+    alert("Para um bom Quizz, você de fazer ao menos 3 perguntas!")
+return false
+}
+if(NumNivel<2){
+    alert("Para o seu Quizz ser mais legal, deve ter ao menos 2 níveis!")
+return false
+}
+return true
+}
+// Clear Input
+function limparInput(){
+    document.querySelector("input.titulo").value="";
+    document.querySelector("input.url_Img").value="";
+    document.querySelector("input.qnt_perguntas").value="";
+    document.querySelector("input.qnt_niveis").value="";
+        
+}
+
 // Função de criar as perguntas
 function criarPerguntas(){
-    console.log(tela1);
     
-    tela3.classList.add("escondido");
+    
+    tela2.classList.add("escondido");;
     tela4.classList.remove("escondido");
+ 
+    console.log(tela2);
 
     let i=0;
     let pergunta =`<h3>Crie suas perguntas</h3>`;
