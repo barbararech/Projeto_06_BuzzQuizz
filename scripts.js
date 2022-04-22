@@ -5,6 +5,7 @@ const tela1 = document.querySelector(".telaListaQuizzes");
 const tela2 = document.querySelector(".telaInfoQuiz");
 const tela3 = document.querySelector(".telaCriarQuizz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
+const tela5 = document.querySelector(".telaCriarNivel");
 
 //Adicionar botão de criar quizz dinamicamente
 iniciarApp()
@@ -13,7 +14,7 @@ function iniciarApp(){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
                 <div class="infoSemQuizz">Você não criou nenhum quizz ainda :(</div>
-                <button type="button">Criar Quizz</button> 
+                <button name="" type="button">Criar Quizz</button> 
             </div>
         `
     } else{
@@ -153,7 +154,7 @@ function criarPerguntas(){
     } while (i<numPerguntas);
 
     document.querySelector(".telaCriarPerguntas").innerHTML += pergunta;
-    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="criarNiveis()">Prosseguir para criar níveis</button>`
+    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="abrirTelaNiveis()">Prosseguir para criar níveis</button>`
     colapsarSecao()
 }
 
@@ -178,6 +179,43 @@ function colapsarSecao(){
 
 //Para criar os níveis
 
-function criarNiveis(){
+function abrirTelaNiveis(){
+    tela4.classList.add("escondido")
+    tela5.classList.remove("escondido")
+    let numeroNiveis= Number(informacoes.niveis);
+    for(let i = 1 ; i<=numeroNiveis;i++){
+        console.log("rodeos")
+tela5.innerHTML += `
+        <div class="nivel">
+            <button type="button" class="buttonReadMore">
+                <h3>Nivel ${i}</h3>
+            </button>
+        <div class="container">
+            <input id="inputPergunta" name="titulo" type="text" placeholder="Título do nível">
+            <input id="inputPergunta" name="porcentagem" type="number" placeholder="% de acerto mínima"> 
+            <input id="inputPergunta" name="imgNivel" type="url" placeholder="URL da imagem do nível">
+            <input id="inputPergunta" name="descNivel" type="text" placeholder="Descrição do nível"> 
+        </div>
+        </div>
 
+       
+`}
+colapsarSecao()
+const nodeNivel=document.querySelectorAll(".nivel")
+nodeNivel.map(insertNivel)
+}
+const arrNivel=[]
+function insertNivel(nivel){
+    const tituloNivel = nivel. getElementsByTagName("titulo").value
+    const porcentagemAcerto= nivel. getElementsByTagName("porcentagem").value
+    const imgNivel= nivel. getElementsByTagName("imgNivel").value
+    const descNivel= nivel. getElementsByTagName("descNivel").value
+
+    arrNivel.push({
+        title:tituloNivel,
+        min_Acerto:porcentagemAcerto,
+        imagem:imgNivel,
+        descricao:descNivel
+    })
+    console.log(arrNivel)
 }

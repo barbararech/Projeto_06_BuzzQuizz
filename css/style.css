@@ -225,17 +225,17 @@ h3{
     align-items: center;
 }
 
-.pergunta{
+.pergunta,.nivel{
     width: 100%;
     max-width: 600px;
     background-color: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     padding: 0 18px;
-    margin-top: 30px;
+    margin-bottom: 30px; 
     position: relative;
 }
 
-.pergunta>:not(:first-child){
+.pergunta>:not(:first-child),.nivel>:not(:first-child){
     display: none;
 }
 
@@ -305,8 +305,19 @@ input::placeholder{
     font-weight: 400;
     color: #fff5f4;
 }
+/* Tela Criar Nivel */
+.telaCriarNivel{
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
 
-
+.nivel .container:last-child{
+    margin-bottom: 20px;
+}
 /* Classe escondido */
 .escondido{
     display:none
