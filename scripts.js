@@ -66,6 +66,7 @@ function insertInfoQuizz(){
     criarPerguntas()
     limparInput();
 }
+
 //Regex - Verificação de URL
 let re = /([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i;
 //Validação de Infos
@@ -159,17 +160,6 @@ function colapsarSecao(){
         });
     }
 }
-
-// Verificação das Perguntas
-// function verificarPerguntas(){
-//     const perguntas = document.querySelectorAll(".pergunta");
-
-//     // for(let i=0; i<Array.from(perguntas).length;i++){ //Com .forEach nao funcionou tbm - Arrumar
-//     //     verificarPerguntasReq()
-//     // }
-//     perguntas.map(verificarPerguntasReq);
-
-// }
 
 function verificarPerguntas(){
     const perguntas = document.querySelectorAll(".pergunta");
