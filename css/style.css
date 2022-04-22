@@ -69,6 +69,9 @@ h1{
     border: 1px dashed #EC362D;
     border-radius: 50px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Seus Quizzes */
@@ -260,6 +263,7 @@ button{
     outline: none;
     margin-top: 14px;
 }
+
 #inputPergunta:first-child{
     margin-top: -12px;
 }
