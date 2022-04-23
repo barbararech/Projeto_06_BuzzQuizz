@@ -2,7 +2,7 @@
 //Variáveis Globais
 let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const tela1 = document.querySelector(".telaListaQuizzes");
-const tela2 = document.querySelector(".telaInfoQuiz");
+const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
 
@@ -43,7 +43,7 @@ function abrirTelaInfo(){
         </div>
     `;
     tela1.classList.add("escondido");
-    tela2.classList.remove("escondido");
+    tela3.classList.remove("escondido");
 }
 
 //Função de inserir as Infos do Quizz
@@ -66,6 +66,7 @@ function insertInfoQuizz(){
 
     criarPerguntas()
     limparInput();
+    console.log(informacoes);
 }
 
 //Regex - Verificação de URL
@@ -73,7 +74,7 @@ let re = /([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i;
 //Validação de Infos
 function  validacaoInfos(title,url,numPergunta,NumNivel){
 
-    /* if(title.length> 65 || title.length<20){
+    if(title.length> 65 || title.length<20){
         alert("O título deve ter entre 20 e 65 letras!")
         return false
     }
@@ -88,7 +89,7 @@ function  validacaoInfos(title,url,numPergunta,NumNivel){
     if(NumNivel<2){
         alert("Para o seu Quizz ser mais legal, deve ter ao menos 2 níveis!")
     return false
-    } */
+    } 
     return true
 }
 
@@ -103,11 +104,11 @@ function limparInput(){
 // Função de criar as perguntas
 function criarPerguntas(){
     
-    tela2.classList.add("escondido");
+    tela3.classList.add("escondido");
     tela4.classList.remove("escondido");
 
     let i=0;
-    const qntPergunta=document.querySelector("input.qnt_perguntas").value; 
+    const qntPergunta=informacoes.perguntas;
     let pergunta =`<h3>Crie suas perguntas</h3>`;
     
     do{
@@ -125,22 +126,22 @@ function criarPerguntas(){
                         
                         <h3>Resposta correta</h3>
                         <input id="inputPergunta" class="respostaCorreta" type="text" placeholder="Resposta correta">
-                        <input id="inputPergunta" type="text" class="urlRespostaCorreta" placeholder="URL da imagem">
+                        <input id="inputPergunta" type="url" class="urlRespostaCorreta" placeholder="URL da imagem">
                         
                         <h3>Respostas incorretas</h3>
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 1">
-                        <input id="inputURLPergunta" type="text" class="urlRespostaIncorreta"  placeholder="URL da imagem 1">
+                        <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta"  placeholder="URL da imagem 1">
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 2">
-                        <input id="inputURLPergunta" type="text" class="urlRespostaIncorreta" placeholder="URL da imagem 2">
+                        <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta" placeholder="URL da imagem 2">
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 3">
-                        <input id="inputURLPergunta" type="text" class="urlRespostaIncorreta" placeholder="URL da imagem 3">
+                        <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta" placeholder="URL da imagem 3">
                     </div>
                 </div>
         `
     } while (i<qntPergunta);
 
     document.querySelector(".telaCriarPerguntas").innerHTML += pergunta;
-    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="abrirTelaNiveis()">Prosseguir para criar níveis</button>`
+    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="objPerguntas()">Prosseguir para criar níveis</button>`
     colapsarSecao()
 }
 
@@ -152,7 +153,7 @@ function colapsarSecao(){
         collapse[i].addEventListener("click", function() {
             this.classList.toggle("active");
             let content = this.nextElementSibling; 
-            console.log(content);
+            // console.log(content);
                 if (content.style.display === "initial") {
                     content.style.display = "none";
                 } else {
@@ -161,6 +162,10 @@ function colapsarSecao(){
         });
     }
 }
+
+let informacoesPerguntas = [];
+let arrayInputRespostasIncorretas = Array();
+let arrayInputUrlIncorretas = Array();
 
 function verificarPerguntas(){
     const perguntas = document.querySelectorAll(".pergunta");
@@ -176,47 +181,47 @@ function verificarPerguntas(){
         
         const respostasIncorretasLength = respostasIncorretas.length;
         const urlRespostasIncorretasLength = urlRespostasIncorretas.length;
-
-        let arrayInput = Array();
-        let arrayUrlInput = Array();
+  
+        
         let re2 = /[0-9A-Fa-f]{6}/g; //Vrificar hexadecimal
 
             // Para verificar se há ao menos uma resposta incorreta
             for (let i=0; i<respostasIncorretasLength;i++){
-                let input = respostasIncorretas[i].value;  
+                let inputRespostasIncorretas = respostasIncorretas[i].value;  
 
-                if (input.length !== 0 ){
-                    arrayInput[i]=input;
+                if (inputRespostasIncorretas.length !== 0 ){
+                    arrayInputRespostasIncorretas[i]=inputRespostasIncorretas;
+                    return arrayInputRespostasIncorretas;
                 }
             }
                 // Filtrando array
-            let filtered = arrayInput.filter(function (el) { 
+            let filtered = arrayInputRespostasIncorretas.filter(function (el) { 
                 return el != null;
                 });
             
-            if(arrayInput.length === 0){
+            if(arrayInputRespostasIncorretas.length === 0){
                 alert("Insira ao menos uma resposta incorreta!");
             }
             
             // Para verificar se há ao menos uma resposta incorreta
             for (let i=0; i<urlRespostasIncorretasLength;i++){
-                let input = urlRespostasIncorretas[i].value;  
+                let inputUrlIncorretas = urlRespostasIncorretas[i].value;  
 
-                if (input.length !== 0 ){
-                    arrayUrlInput[i]=input;
-
-                    if (!re.test(input)){
+                if (inputUrlIncorretas.length !== 0 ){
+                    arrayInputUrlIncorretas[i]=inputUrlIncorretas;
+                    if (!re.test(arrayInputUrlIncorretas)){
                         alert(`A imagem deve ser inserida como URL (Formato: https://www.exemplo.jpeg)!`)
                         return false;
                     }
+                    return arrayInputUrlIncorretas;
                 } 
             }
                 // Filtrando array
-            let filtered2 = arrayUrlInput.filter(function (el) { 
+            let filtered2 = arrayInputUrlIncorretas.filter(function (el) { 
                 return el != null;
                 });
             
-            if(arrayUrlInput.length === 0){
+            if(arrayInputUrlIncorretas.length === 0){
                 alert("Insira uma imagem para a resposta incorreta!");
             }
     
@@ -238,47 +243,85 @@ function verificarPerguntas(){
                     return false
                 }
     }
-             criarNiveis();
 }
+// Criar objeto das perguntas - Tem que arrumar, ta repetindo mta variavel criada antes(deixei assim pq tava dando erro)
+function objPerguntas(){
+    const perguntas = document.querySelectorAll(".pergunta");
 
+    for(let j=0; j<perguntas.length; j++){
+        const textoPergunta = perguntas[j].querySelector("input.textoPergunta").value;
+        const corPergunta = perguntas[j].querySelector("input.corPergunta").value;
+        const respostaCorreta = perguntas[j].querySelector("input.respostaCorreta").value;
+        const urlRespostaCorreta = perguntas[j].querySelector("input.urlRespostaCorreta").value;
+        const respostasIncorretas = perguntas[j].querySelectorAll("input.respostaIncorreta");
+        const urlRespostasIncorretas = perguntas[j].querySelectorAll("input.urlRespostaIncorreta");
+        
+
+        const respostasIncorretasLength = respostasIncorretas.length;
+        const urlRespostasIncorretasLength = urlRespostasIncorretas.length;
+
+        for (let i=0; i<respostasIncorretasLength;i++){
+            let inputRespostasIncorretas = respostasIncorretas[i].value;
+            let inputUrlIncorretas = urlRespostasIncorretas[i].value;    
+
+            if (inputRespostasIncorretas.length !== 0 && inputUrlIncorretas.length !== 0){
+                arrayInputRespostasIncorretas[i]=inputRespostasIncorretas;
+                arrayInputUrlIncorretas[i]=inputUrlIncorretas;
+            }
+        }
+ 
+        informacoesPerguntas.push({
+            texto: textoPergunta,
+            cor:corPergunta,
+            respCorreta:respostaCorreta,
+            imgRespCorreta:urlRespostaCorreta,
+            respIncorreta:arrayInputRespostasIncorretas,
+            imgRespIncorreta:arrayInputUrlIncorretas
+        })
+    
+    }
+    
+    console.log(informacoesPerguntas);
+    abrirTelaNiveis()
+}
 
 //Para criar os níveis
 let nodeNivel;
 let contadorPorcentagem=0;
 let arrNivel=[];
 function abrirTelaNiveis(){
-    tela4.classList.add("escondido")
-    tela5.classList.remove("escondido")
+    console.log(informacoesPerguntas);
+    tela4.classList.add("escondido");
+    tela5.classList.remove("escondido");
     let numeroNiveis= Number(informacoes.niveis);
     for(let i = 1 ; i<=numeroNiveis;i++){
-        console.log("rodeos")
-tela5.innerHTML += `
-        <div class="nivel">
-            <button type="button" class="buttonReadMore">
-                <h3>Nivel ${i}</h3>
-            </button>
-        <div class="container">
-            <input id="inputPergunta" class="tituloNivel" type="text" placeholder="Título do nível">
-            <input id="inputPergunta" class="porcentagem" type="number" placeholder="% de acerto mínima"> 
-            <input id="inputPergunta" class="imgNivel" type="url" placeholder="URL da imagem do nível">
-            <input id="inputNivelDesc" class="descNivel" type="text" placeholder="Descrição do nível"> 
-        </div>
-        </div>
-
-       
-`}
-tela5.innerHTML += `<button class="botaoIrParaNiveis" onclick="finalizarNivel()">Finazalizar Quizz</button>`
-nodeNivel=document.querySelectorAll(".nivel")
-colapsarSecao()
+        // console.log("rodeos")
+        tela5.innerHTML += `
+                <div class="nivel">
+                    <button type="button" class="buttonReadMore">
+                        <h3>Nivel ${i}</h3>
+                    </button>
+                <div class="container">
+                    <input id="inputPergunta" class="tituloNivel" type="text" placeholder="Título do nível">
+                    <input id="inputPergunta" class="porcentagem" type="number" placeholder="% de acerto mínima"> 
+                    <input id="inputPergunta" class="imgNivel" type="url" placeholder="URL da imagem do nível">
+                    <input id="inputNivelDesc" class="descNivel" type="text" placeholder="Descrição do nível"> 
+                </div>
+                </div>     
+                `
+}
+    tela5.innerHTML += `<button class="botaoIrParaNiveis" onclick="finalizarNivel()">Finalizar Quizz</button>`
+    nodeNivel=document.querySelectorAll(".nivel")
+    colapsarSecao()
 }
 
 function insertNivel(){
     for(let i = 0; i<nodeNivel.length; i++){
-            let nivel = nodeNivel[i]
+            let nivel = nodeNivel[i];
             
         if(verificarNiveis(nivel,i)){
             const tituloNivel = nivel.querySelector(".tituloNivel").value;
-            const porcentagemAcerto= nivel.querySelector(".porcentagem").value;
+            const porcentagemAcerto= Number(nivel.querySelector(".porcentagem").value);
             const imgNivel= nivel.querySelector(".imgNivel").value;
             const descNivel= nivel.querySelector(".descNivel").value;
 
@@ -288,19 +331,21 @@ function insertNivel(){
                 imagem:imgNivel,
                 descricao:descNivel
             })
+
             if(contadorPorcentagem===nodeNivel.length-1){
-                alert("Para o quiz ficar divertido, tem que haver ao menos um nível com a porcentagem mínima de acerto igual a 0!");
-                alert("Por favor, preencha corretamente!");
-                arrNivel=[];
+                //alert("Para o quiz ficar divertido, tem que haver ao menos um nível com a porcentagem mínima de acerto igual a 0!");
+                // alert("Por favor, preencha corretamente!");
+                // arrNivel=[];
             break
             }
         }else{
-            arrNivel=[];
-            alert("Por favor, preencha corretamente!");
+            // arrNivel=[];
+            // alert("Por favor, preencha corretamente!");
             break
         }
     }
-    
+    enviarQuizzApi();
+    console.log(arrNivel);
 }
 
 function verificarNiveis(nivel,numNivel){
@@ -318,9 +363,8 @@ function verificarNiveis(nivel,numNivel){
     if (!porcentagemValida||!porcentagemAcerto){
         alert(`A porcentagem de acerto tem que ser entre 100 e 0! Confira Nível ${numNivel+1}`);
         return false
-        }
+    }
 
-    
     if(!re.test(linkImg)){
         alert(`A imagem tem que ser um link! Confira Nível ${numNivel+1}`);
         return false
@@ -340,3 +384,61 @@ function verificarNiveis(nivel,numNivel){
 function finalizarNivel(){
     insertNivel()
 }
+
+function enviarQuizzApi(){
+    const objQuizz = {
+            title: informacoes.titulo,
+            image: informacoes.imagem,
+            questions: [],
+            levels: [],
+        }
+        
+        for (let i = 0; i < informacoesPerguntas.length; i++) {
+            objQuizz.questions[i].answers.push({
+                title: informacoesPerguntas[i].texto,
+                color: informacoesPerguntas[i].cor,
+                answers: [{
+                    text: informacoesPerguntas[i].respCorreta,
+                    image: informacoesPerguntas[i].imgRespCorreta,
+                    isCorrectAnswer: true
+                }]
+            })
+
+            for (let j = 0; j < informacoesPerguntas[i].respIncorreta.length; j++) {
+                objQuizz.questions[i].answers.push({
+                    text: informacoesPerguntas[i].respIncorreta[j],
+                    image: informacoesPerguntas[i].imgRespIncorreta[j],
+                    isCorrectAnswer: false
+                })
+            }
+        }
+
+        for (let i=0; i<arrNivel.length; i++){
+            objQuizz.levels.push({
+                title: arrNivel[i].title,
+                image: arrNivel[i].imagem,
+                text: arrNivel[i].descricao,
+                minValue: arrNivel[i].min_Acerto
+            })
+        }
+
+    console.log(objQuizz);
+    console.log(JSON.stringify(objQuizz))
+    const promise = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes", objQuizz);
+    promise.then((response)=> {
+        // const quizzes = response.data;
+        // quizzUsuario(quizzes);
+        alert("Deu boa");
+    })
+    promise.catch(function(){alert('Erro')});
+}
+
+// function  quizzUsuario(){
+
+// }
+
+// function telaSucessoQuizz(){
+//     alert("Deu boa");
+// }
+
+
