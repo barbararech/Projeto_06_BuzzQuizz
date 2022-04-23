@@ -305,17 +305,17 @@ function insertNivel(){
 
 function verificarNiveis(nivel,numNivel){
     const tituloNivel = nivel.querySelector(".tituloNivel").value;
-    const porcentagemAcerto= parseInt(nivel.querySelector(".porcentagem").value);
+    const porcentagemAcerto= nivel.querySelector(".porcentagem").value;
     const linkImg= nivel.querySelector(".imgNivel").value;
     const descNivel= nivel.querySelector(".descNivel").value;
-    const porcentagemValida = porcentagemAcerto<=100 && porcentagemAcerto>=0;
+    const porcentagemValida = (parseInt(porcentagemAcerto)<=100 && parseInt(porcentagemAcerto)>=0);
     
     console.log(porcentagemAcerto)
      if(tituloNivel.length<10||!tituloNivel){
         alert(`Um título legal tem que ter mais de 10 letras! Confira Nível ${numNivel+1}`);
         return false
     }
-    if (!porcentagemValida||porcentagemAcerto){
+    if (!porcentagemValida||!porcentagemAcerto){
         alert(`A porcentagem de acerto tem que ser entre 100 e 0! Confira Nível ${numNivel+1}`);
         return false
         }
