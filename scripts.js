@@ -126,15 +126,15 @@ function criarPerguntas(){
                         
                         <h3>Resposta correta</h3>
                         <input id="inputPergunta" class="respostaCorreta" type="text" placeholder="Resposta correta">
-                        <input id="inputPergunta" type="text" class="urlRespostaCorreta" placeholder="URL da imagem">
+                        <input id="inputPergunta" type="url" class="urlRespostaCorreta" placeholder="URL da imagem">
                         
                         <h3>Respostas incorretas</h3>
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 1">
-                        <input id="inputURLPergunta" type="text" class="urlRespostaIncorreta"  placeholder="URL da imagem 1">
+                        <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta"  placeholder="URL da imagem 1">
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 2">
-                        <input id="inputURLPergunta" type="text" class="urlRespostaIncorreta" placeholder="URL da imagem 2">
+                        <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta" placeholder="URL da imagem 2">
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 3">
-                        <input id="inputURLPergunta" type="text" class="urlRespostaIncorreta" placeholder="URL da imagem 3">
+                        <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta" placeholder="URL da imagem 3">
                     </div>
                 </div>
         `
@@ -321,7 +321,7 @@ function insertNivel(){
             
         if(verificarNiveis(nivel,i)){
             const tituloNivel = nivel.querySelector(".tituloNivel").value;
-            const porcentagemAcerto= nivel.querySelector(".porcentagem").value;
+            const porcentagemAcerto= Number(nivel.querySelector(".porcentagem").value);
             const imgNivel= nivel.querySelector(".imgNivel").value;
             const descNivel= nivel.querySelector(".descNivel").value;
 
@@ -360,12 +360,11 @@ function verificarNiveis(nivel,numNivel){
         alert(`Um título legal tem que ter mais de 10 letras! Confira Nível ${numNivel+1}`);
         return false
     }
-    // if (!porcentagemValida||porcentagemAcerto){
-    //     alert(`A porcentagem de acerto tem que ser entre 0 e 100! Confira Nível ${numNivel+1}`);
-    //     return false
-    //     }
+    if (!porcentagemValida||porcentagemAcerto){
+        alert(`A porcentagem de acerto tem que ser entre 0 e 100! Confira Nível ${numNivel+1}`);
+        return false
+    }
 
-    
     if(!re.test(linkImg)){
         alert(`A imagem tem que ser um link! Confira Nível ${numNivel+1}`);
         return false
@@ -393,18 +392,9 @@ function enviarQuizzApi(){
             questions: [],
             levels: [],
         }
-
-        for (let i=0; i<arrNivel.length; i++){
-            objQuizz.levels.push({
-                title: arrNivel[i].title,
-                image: arrNivel[i].imagem,
-                text: arrNivel[i].descricao,
-                minValue: arrNivel[i].min_Acerto
-            })
-        }
         
         for (let i = 0; i < informacoesPerguntas.length; i++) {
-            objQuizz.questions.push({
+            objQuizz.questions[i].answers.push({
                 title: informacoesPerguntas[i].texto,
                 color: informacoesPerguntas[i].cor,
                 answers: [{
@@ -415,22 +405,40 @@ function enviarQuizzApi(){
             })
 
             for (let j = 0; j < informacoesPerguntas[i].respIncorreta.length; j++) {
-                objQuizz.questions.push({
+                objQuizz.questions[i].answers.push({
                     text: informacoesPerguntas[i].respIncorreta[j],
                     image: informacoesPerguntas[i].imgRespIncorreta[j],
                     isCorrectAnswer: false
                 })
             }
-    }
+        }
+
+        for (let i=0; i<arrNivel.length; i++){
+            objQuizz.levels.push({
+                title: arrNivel[i].title,
+                image: arrNivel[i].imagem,
+                text: arrNivel[i].descricao,
+                minValue: arrNivel[i].min_Acerto
+            })
+        }
 
     console.log(objQuizz);
     console.log(JSON.stringify(objQuizz))
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes", objQuizz);
-    promise.then(telaSucessoQuizz);
+    promise.then((response)=> {
+        // const quizzes = response.data;
+        // quizzUsuario(quizzes);
+        alert("Deu boa");
+    })
     promise.catch(function(){alert('Erro')});
 }
 
+// function  quizzUsuario(){
 
-function telaSucessoQuizz(){
-    alert("Deu boa");
-}
+// }
+
+// function telaSucessoQuizz(){
+//     alert("Deu boa");
+// }
+
+
