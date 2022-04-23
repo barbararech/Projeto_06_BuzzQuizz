@@ -6,9 +6,15 @@ const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
 
+function inicio(){
+    window.location.reload(true);
+}
+
 //Adicionar botão de criar quizz dinamicamente
 iniciarApp()
 function iniciarApp(){
+    tela1.classList.remove("escondido");
+
     if (seusQuizzes.length === 0){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
@@ -319,9 +325,9 @@ function insertNivel(){
     for(let i = 0; i<nodeNivel.length; i++){
             let nivel = nodeNivel[i];
             
-        if(verificarNiveis(nivel,i)){
+        // if(verificarNiveis(nivel,i)){
             const tituloNivel = nivel.querySelector(".tituloNivel").value;
-            const porcentagemAcerto= Number(nivel.querySelector(".porcentagem").value);
+            const porcentagemAcerto= nivel.querySelector(".porcentagem").value;
             const imgNivel= nivel.querySelector(".imgNivel").value;
             const descNivel= nivel.querySelector(".descNivel").value;
 
@@ -332,17 +338,17 @@ function insertNivel(){
                 descricao:descNivel
             })
 
-            if(contadorPorcentagem===nodeNivel.length-1){
-                //alert("Para o quiz ficar divertido, tem que haver ao menos um nível com a porcentagem mínima de acerto igual a 0!");
-                // alert("Por favor, preencha corretamente!");
-                // arrNivel=[];
-            break
-            }
-        }else{
-            // arrNivel=[];
-            // alert("Por favor, preencha corretamente!");
-            break
-        }
+        //     if(contadorPorcentagem===nodeNivel.length-1){
+        //         //alert("Para o quiz ficar divertido, tem que haver ao menos um nível com a porcentagem mínima de acerto igual a 0!");
+        //         // alert("Por favor, preencha corretamente!");
+        //         // arrNivel=[];
+        //     break
+        //     }
+        // }else{
+        //     // arrNivel=[];
+        //     // alert("Por favor, preencha corretamente!");
+        //     break
+        // }
     }
     enviarQuizzApi();
     console.log(arrNivel);
@@ -390,11 +396,11 @@ function enviarQuizzApi(){
             title: informacoes.titulo,
             image: informacoes.imagem,
             questions: [],
-            levels: [],
+            levels: []
         }
         
         for (let i = 0; i < informacoesPerguntas.length; i++) {
-            objQuizz.questions[i].answers.push({
+            objQuizz.questions.push({
                 title: informacoesPerguntas[i].texto,
                 color: informacoesPerguntas[i].cor,
                 answers: [{
@@ -418,27 +424,40 @@ function enviarQuizzApi(){
                 title: arrNivel[i].title,
                 image: arrNivel[i].imagem,
                 text: arrNivel[i].descricao,
-                minValue: arrNivel[i].min_Acerto
+                minValue: Number(arrNivel[i].min_Acerto)
             })
         }
 
     console.log(objQuizz);
     console.log(JSON.stringify(objQuizz))
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes", objQuizz);
-    promise.then((response)=> {
-        // const quizzes = response.data;
-        // quizzUsuario(quizzes);
-        alert("Deu boa");
-    })
+    promise.then(quizUsuarioLocalStorage)
     promise.catch(function(){alert('Erro')});
 }
 
-// function  quizzUsuario(){
+function quizUsuarioLocalStorage(resposta){
+    const QuizId = resposta.data.id;
+    console.log(QuizId);
 
-// }
+    localStorage.setItem("IdUsuario", QuizId);
+    getQuizUsuarioLocalStorage()
+}
 
-// function telaSucessoQuizz(){
-//     alert("Deu boa");
-// }
+// tem q arrumar, o push ta colocando o ultimo id no array mas nao salva os outros;
+function getQuizUsuarioLocalStorage(){
+
+    let listaIdsUsuario = [];
+
+    listaIdsUsuario.push(localStorage.getItem("IdUsuario"));
+    console.log(listaIdsUsuario);
+
+    let stringIds = JSON.stringify(listaIdsUsuario);
+    localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
+    console.log(listaIdsUsuario);
+}
+
+function telaSucessoQuizz(){
+    alert("Deu boa");
+}
 
 
