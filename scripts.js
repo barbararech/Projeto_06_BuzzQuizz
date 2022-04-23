@@ -67,6 +67,7 @@ function insertInfoQuizz(){
     criarPerguntas()
     limparInput();
 }
+
 //Regex - Verificação de URL
 let re = /([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i;
 //Validação de Infos
@@ -160,7 +161,6 @@ function colapsarSecao(){
         });
     }
 }
-
 
 function verificarPerguntas(){
     const perguntas = document.querySelectorAll(".pergunta");
