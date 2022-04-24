@@ -369,7 +369,7 @@ function verificarNiveis(nivel,numNivel){
         alert(`Um nível legal tem que ter uma descrição com mais de 30 letras! Confira Nível ${numNivel+1}`);
         return false
     }
-    if(parseInt(porcentagemAcerto!==0)){
+    if(parseInt(porcentagemAcerto)!==0){
         contadorPorcentagem+=1;
     }
    return true
