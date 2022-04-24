@@ -33,13 +33,13 @@ h1{
 .conteudo{
   margin-top: 69px;
   width: 100%;
-  overflow-y: scroll; 
-  overflow-x: hidden;
+  overflow-y: auto; 
+  overflow-x:hidden;
 }
 
 /* Área Criar Quizz */
 .criarQuizz{
-    min-width: 300px;
+    width: 1110px;
     height: 181px;
     display: flex;
     flex-direction: column;
@@ -75,12 +75,22 @@ h1{
     justify-content: center;
 }
 
+/* Tela Lista dos Quizzes */
+.telaListaQuizzes{
+    width: 100%;
+    overflow: auto;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /* Seus Quizzes */
 .seusQuizzes{
-   max-width: 1051px;
-   margin:69px 195px;
    display: flex;
-   align-items: center;
+   align-items: center; 
+   width: 1110px;
+   margin: 77px 0px;
 }
 
 .seusQuizzesHeader{
@@ -90,10 +100,10 @@ h1{
     width: 100%;
 }
 
-.seusQuizzesHeader h2{
+h2{
     font-size: 20px;
     font-weight: 700;
-    margin-right: 17px;
+    /* margin-right: 17px; */
 }
 
 .iconCriarQuizz{
@@ -102,6 +112,55 @@ h1{
     color: #EC362D;
     cursor: pointer;
 }
+
+
+/* Todos os Quizzes */
+.todosOsQuizzes{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin:0 auto;
+    max-width: 1110px;
+    overflow-x: auto;
+ }
+
+ .coverQuiz{
+     display: flex;
+     align-items: center;
+     flex-wrap: wrap;
+     width: 340px;
+     height: 181px;
+     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url('/images/gato.jpg');
+     background-repeat: no-repeat;
+     border-radius: 5px;
+     background-size: cover;
+     position: relative;
+     margin-right: 16px;
+     margin-bottom: 12px;
+     cursor: pointer;
+ }
+
+ .gradeQuizzes{
+     display: grid;
+     gap: 10px 20px;
+     margin-top: 12px; 
+     grid-template-columns: 1fr 1fr 1fr;
+     grid-template-rows: repeat(auto-fill, minmax(12px, 181px));
+ }
+
+ span {
+     display: flex;
+     white-space:pre-wrap;
+     word-wrap: break-word;
+     text-align:start;
+     color: #ffffff;
+     font-weight: 400;
+     font-size: 19px;
+     position: absolute;
+     bottom: 8px;
+     left: 17px;
+ }
 
 /* Tela Criacao do Quizz */
 .telaCriarQuizz{
@@ -325,6 +384,17 @@ input::placeholder{
 #inputNivelDesc{
     margin: 12px 0 30px 0;
 }
+
+/* Tela Criar Nivel */
+.telaQuizz{
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
 /* Classe escondido */
 .escondido{
     display:none
@@ -338,9 +408,10 @@ input::placeholder{
         margin-top: 38px;
     }
     
-    /* Botão de criar quizz */
+    /* Área de criar quizz */
     .criarQuizz{
-        margin: 31px 17px;
+        width: 360px;
+        margin: 69px 17px 35px 17px;
     }
 
      /* Botão de criar perguntas */
@@ -350,8 +421,8 @@ input::placeholder{
 
     /* Seus quizzes */
     .seusQuizzes{
-        margin:38px 18px;
-        min-width: 340px;
+        width: 360px;
+        margin:69px 17px;
         flex-wrap: wrap;
      }
 
@@ -366,4 +437,13 @@ input::placeholder{
     .botaoIrParaNiveis{
         margin-top: 46px;
     }
+
+    .todosOsQuizzes{
+        margin: 31px 17px;
+     }
+    
+     .gradeQuizzes{
+        grid-template-columns: 1fr;
+     }
+
 }

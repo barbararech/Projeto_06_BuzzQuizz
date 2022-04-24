@@ -2,6 +2,7 @@
 //Variáveis Globais
 let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const tela1 = document.querySelector(".telaListaQuizzes");
+const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
@@ -32,6 +33,23 @@ function iniciarApp(){
             </section>
         `
     }
+    listarTodosQuizzes();
+}
+
+function listarTodosQuizzes(){
+    document.querySelector(".telaListaQuizzes").innerHTML += ` <section class="todosOsQuizzes">
+    <h2>Todos os Quizzes</h2>
+    <div class="gradeQuizzes">
+        <div class="coverQuiz" onclick="abrirTelaQuizz()">
+            <span>gatoatogatogatogatogatogato gatogato</span>                    
+        </div>
+    </div>
+</section>`
+}
+
+function abrirTelaQuizz(){
+    tela1.classList.add("escondido");
+    tela2.classList.remove("escondido");
 }
 
 //InnerHTML da Tela de Info
@@ -425,7 +443,7 @@ function enviarQuizzApi(){
 }
 
 function quizUsuarioLocalStorage(resposta){
-    let quizzId = []
+    let quizzId = [];
     quizzId = resposta.data.id;
     console.log(quizzId);
 
@@ -433,10 +451,9 @@ function quizUsuarioLocalStorage(resposta){
     getQuizUsuarioLocalStorage()
 }
 
+let listaIdsUsuario = [];
 // tem q arrumar, o push ta colocando o ultimo id no array mas nao salva os outros;
 function getQuizUsuarioLocalStorage(){
-
-    let listaIdsUsuario = [];
 
     listaIdsUsuario.push(localStorage.getItem("IdUsuario"));
     console.log(listaIdsUsuario);
@@ -450,5 +467,4 @@ function getQuizUsuarioLocalStorage(){
 function telaSucessoQuizz(){
     alert("Deu boa");
 }
-
 
