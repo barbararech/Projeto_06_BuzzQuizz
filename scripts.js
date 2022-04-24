@@ -1,6 +1,7 @@
 
 //Variáveis Globais
 let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
+const conteudoHTML= document.querySelector(".conteudo") // criei pra ficar limpando o html ao inves de ligar de desligar o "escondido"
 const tela1 = document.querySelector(".telaListaQuizzes");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
@@ -26,7 +27,7 @@ function iniciarApp(){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <section class="seusQuizzes">
                 <div class="seusQuizzesHeader">
-                    <h2>Seus Quizzes</h2>
+                    <h3>Seus Quizzes</h3>
                     <ion-icon id="ButtonCriarQuizz" class= "iconCriarQuizz" name="add-circle" onclick="abrirTelaInfo()"></ion-icon>
                 </div>
             </section>
@@ -38,7 +39,7 @@ function iniciarApp(){
 function abrirTelaInfo(){
     document.querySelector(".telaInfoQuiz").innerHTML =`
         <div class="conteiner_info">
-            <h2>Começando pelo começo</h2>
+            <h4>Começando pelo começo</h4>
             <div class="caixa_info">
                 <input type="text" class="titulo"  placeholder="Título do Seu Quizz">
                 <input type="url" class="url_Img"   placeholder="URL da imagem do seu Quizz">
@@ -53,7 +54,7 @@ function abrirTelaInfo(){
 }
 
 //Função de inserir as Infos do Quizz
-let informacoes= {};
+let informacoesBasicas= {};
 function insertInfoQuizz(){
     const titulo=document.querySelector("input.titulo").value
     const imgQuizz=document.querySelector("input.url_Img").value;
@@ -65,14 +66,14 @@ function insertInfoQuizz(){
         return
     }
 
-    informacoes.titulo=titulo;
-    informacoes.imagem=imgQuizz;
-    informacoes.perguntas=qntPergunta;
-    informacoes.niveis=qntNiveis;
+    informacoesBasicas.titulo=titulo;
+    informacoesBasicas.imagem=imgQuizz;
+    informacoesBasicas.perguntas=qntPergunta;
+    informacoesBasicas.niveis=qntNiveis;
 
     criarPerguntas()
     limparInput();
-    console.log(informacoes);
+    console.log(informacoesBasicas);
 }
 
 //Regex - Verificação de URL
@@ -114,7 +115,7 @@ function criarPerguntas(){
     tela4.classList.remove("escondido");
 
     let i=0;
-    const qntPergunta=informacoes.perguntas;
+    const qntPergunta=informacoesBasicas.perguntas;
     let pergunta =`<h3>Crie suas perguntas</h3>`;
     
     do{
@@ -122,7 +123,7 @@ function criarPerguntas(){
         pergunta += `
                 <div class="pergunta">
                     <button type="button" class="buttonReadMore">
-                        <h3>Pergunta ${[i]}</h3>
+                        <h4>Pergunta ${[i]}</h4>
                         <ion-icon class="iconeReadMore" name="create-outline" >
                         </ion-icon>
                     </button>
@@ -130,11 +131,11 @@ function criarPerguntas(){
                         <input id="inputPergunta" class="textoPergunta" type="text" placeholder="Texto da pergunta">
                         <input id="inputPergunta" class="corPergunta" type="text" placeholder="Cor de fundo da pergunta">
                         
-                        <h3>Resposta correta</h3>
+                        <h4>Resposta correta</h4>
                         <input id="inputPergunta" class="respostaCorreta" type="text" placeholder="Resposta correta">
                         <input id="inputPergunta" type="url" class="urlRespostaCorreta" placeholder="URL da imagem">
                         
-                        <h3>Respostas incorretas</h3>
+                        <h4>Respostas incorretas</h4>
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 1">
                         <input id="inputURLPergunta" type="url" class="urlRespostaIncorreta"  placeholder="URL da imagem 1">
                         <input id="inputPergunta" type="text" class="respostaIncorreta" placeholder="Resposta incorreta 2">
@@ -299,13 +300,15 @@ function abrirTelaNiveis(){
     console.log(informacoesPerguntas);
     tela4.classList.add("escondido");
     tela5.classList.remove("escondido");
-    let numeroNiveis= Number(informacoes.niveis);
+    let numeroNiveis= Number(informacoesBasicas.niveis);
+    tela4.innerHTML=``
+    tela5.innerHTML =`<h3>Agora, decida os níveis</h3>`
     for(let i = 1 ; i<=numeroNiveis;i++){
         // console.log("rodeos")
         tela5.innerHTML += `
                 <div class="nivel">
                     <button type="button" class="buttonReadMore">
-                        <h3>Nivel ${i}</h3>
+                        <h4>Nivel ${i}</h4>
                     </button>
                 <div class="container">
                     <input id="inputPergunta" class="tituloNivel" type="text" placeholder="Título do nível">
@@ -391,10 +394,11 @@ function finalizarNivel(){
     insertNivel()
 }
 
+//Envio do Quiz Para API
 function enviarQuizzApi(){
     const objQuizz = {
-            title: informacoes.titulo,
-            image: informacoes.imagem,
+            title: informacoesBasicas.titulo,
+            image: informacoesBasicas.imagem,
             questions: [],
             levels: []
         }
@@ -441,6 +445,7 @@ function quizUsuarioLocalStorage(resposta){
 
     localStorage.setItem("IdUsuario", QuizId);
     getQuizUsuarioLocalStorage()
+    pedirQuizzData()
 }
 
 // tem q arrumar, o push ta colocando o ultimo id no array mas nao salva os outros;
@@ -456,8 +461,31 @@ function getQuizUsuarioLocalStorage(){
     console.log(listaIdsUsuario);
 }
 
-function telaSucessoQuizz(){
-    alert("Deu boa");
+function pedirQuizzData(){
+    const listaIdSerializada= localStorage.getItem("listaIdsUsuarioLocalStorage");
+    const listaID= JSON.parse(listaIdSerializada)
+    const ultimoID= listaID[listaID.length-1]
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${ultimoID}`)
+    promise.then(telaSucessoQuizz)
 }
 
-
+function telaSucessoQuizz(response){
+    const dataQuizz=response.data
+    conteudoHTML.innerHTML=`
+    <div class="telaSucessoQuizz">
+                <div class="titulo"> 
+                    <h3>Seu quizz está pronto!</h3> 
+                </div>
+                <div class="preview_Quizz">
+                    <img src=${dataQuizz.image} alt="Imagem principal do seu Quizz">
+                    <div class="degrade_background"></div>
+                    <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
+                </div>
+                <div class="botoes">
+                    <button class="acessoQuiz"><h5 class="branco">Acessar quizz</h5></button>
+                    <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
+                </div>
+    </div>
+    `
+    alert("Deu boa");
+}
