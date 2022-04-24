@@ -1,11 +1,12 @@
 
 //Variáveis Globais
-let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
+// let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const tela1 = document.querySelector(".telaListaQuizzes");
 const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
+let listaIdsUsuario = [];
 
 function inicio(){
     window.location.reload(true);
@@ -15,8 +16,9 @@ function inicio(){
 iniciarApp()
 function iniciarApp(){
     tela1.classList.remove("escondido");
+    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
 
-    if (seusQuizzes.length === 0){
+    if (listaIdsUsuario.length === 0){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
                 <div class="infoSemQuizz">Você não criou nenhum quizz ainda :(</div>
@@ -35,7 +37,7 @@ function iniciarApp(){
     }
     listarTodosQuizzes();
 }
-
+// Listagem de todos os quizzes
 function listarTodosQuizzes(){
     document.querySelector(".telaListaQuizzes").innerHTML += ` <section class="todosOsQuizzes">
     <h2>Todos os Quizzes</h2>
@@ -47,6 +49,7 @@ function listarTodosQuizzes(){
 </section>`
 }
 
+// Abrir tela do quizz
 function abrirTelaQuizz(){
     tela1.classList.add("escondido");
     tela2.classList.remove("escondido");
@@ -296,7 +299,6 @@ function objPerguntas(){
   
 }
 
-
 //Para criar os níveis
 let nodeNivel;
 let contadorPorcentagem=0;
@@ -448,11 +450,11 @@ function quizUsuarioLocalStorage(resposta){
     console.log(quizzId);
 
     localStorage.setItem("IdUsuario", JSON.stringify(quizzId));
-    getQuizUsuarioLocalStorage()
+    getQuizUsuarioLocalStorage();
 }
 
-let listaIdsUsuario = [];
-// tem q arrumar, o push ta colocando o ultimo id no array mas nao salva os outros;
+
+// Pegar os Ids do usuário
 function getQuizUsuarioLocalStorage(){
 
     listaIdsUsuario.push(localStorage.getItem("IdUsuario"));
@@ -460,6 +462,7 @@ function getQuizUsuarioLocalStorage(){
 
     let stringIds = JSON.stringify(listaIdsUsuario);
     localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
+    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
     console.log(listaIdsUsuario);
     telaSucessoQuizz()
 }
