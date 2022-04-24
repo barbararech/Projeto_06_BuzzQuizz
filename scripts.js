@@ -148,7 +148,7 @@ function criarPerguntas(){
 
     document.querySelector(".telaCriarPerguntas").innerHTML += pergunta;
     document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="objPerguntas()">Prosseguir para criar níveis</button>`
-    colapsarSecao()
+    colapsarSecao();
 }
 
 // Para fazer surgir a seção na criação das perguntas
@@ -175,7 +175,7 @@ let arrayInputUrlIncorretas = Array();
 
 function verificarPerguntas(){
     const perguntas = document.querySelectorAll(".pergunta");
-
+    
     for(let j=0; j<perguntas.length; j++){
 
         const textoPergunta = perguntas[j].querySelector("input.textoPergunta").value;
@@ -185,52 +185,37 @@ function verificarPerguntas(){
         const respostasIncorretas = perguntas[j].querySelectorAll("input.respostaIncorreta");
         const urlRespostasIncorretas = perguntas[j].querySelectorAll("input.urlRespostaIncorreta");
         
-        const respostasIncorretasLength = respostasIncorretas.length;
-        const urlRespostasIncorretasLength = urlRespostasIncorretas.length;
-  
+        const respostasIncorretasLength = respostasIncorretas.length;  
         
-        let re2 = /[0-9A-Fa-f]{6}/g; //Vrificar hexadecimal
+        let re2 = /[0-9A-Fa-f]{6}/g; //Verificar hexadecimal
 
             // Para verificar se há ao menos uma resposta incorreta
             for (let i=0; i<respostasIncorretasLength;i++){
-                let inputRespostasIncorretas = respostasIncorretas[i].value;  
+                let inputRespostasIncorretas = respostasIncorretas[i].value; 
+                let inputUrlIncorretas = urlRespostasIncorretas[i].value; 
 
-                if (inputRespostasIncorretas.length !== 0 ){
+                if (inputRespostasIncorretas.length !== 0 && inputUrlIncorretas.length !== 0 ){
                     arrayInputRespostasIncorretas[i]=inputRespostasIncorretas;
-                    return arrayInputRespostasIncorretas;
-                }
-            }
-                // Filtrando array
-            let filtered = arrayInputRespostasIncorretas.filter(function (el) { 
-                return el != null;
-                });
-            
-            if(arrayInputRespostasIncorretas.length === 0){
-                alert("Insira ao menos uma resposta incorreta!");
-            }
-            
-            // Para verificar se há ao menos uma resposta incorreta
-            for (let i=0; i<urlRespostasIncorretasLength;i++){
-                let inputUrlIncorretas = urlRespostasIncorretas[i].value;  
-
-                if (inputUrlIncorretas.length !== 0 ){
                     arrayInputUrlIncorretas[i]=inputUrlIncorretas;
+
                     if (!re.test(arrayInputUrlIncorretas)){
                         alert(`A imagem deve ser inserida como URL (Formato: https://www.exemplo.jpeg)!`)
                         return false;
                     }
-                    return arrayInputUrlIncorretas;
-                } 
+                    return arrayInputUrlIncorretas, arrayInputRespostasIncorretas;
+                }
             }
                 // Filtrando array
-            let filtered2 = arrayInputUrlIncorretas.filter(function (el) { 
+            let filtered = arrayInputRespostasIncorretas.filter(function(el){ 
                 return el != null;
                 });
-            
-            if(arrayInputUrlIncorretas.length === 0){
-                alert("Insira uma imagem para a resposta incorreta!");
+            let filtered2 = arrayInputUrlIncorretas.filter(function(el){ 
+                return el != null;
+                });
+
+            if(arrayInputRespostasIncorretas.length === 0 && arrayInputUrlIncorretas.length === 0){
+                alert("Insira ao menos uma resposta incorreta!");
             }
-    
 
             if(textoPergunta.length<20){
                 alert("O título deve ter mais de 20 letras!");
@@ -246,50 +231,53 @@ function verificarPerguntas(){
 
             if(!re.test(urlRespostaCorreta)){
                     alert(`A imagem deve ser inserida como URL (Formato: https://www.exemplo.com)!`);
-                    return false
-                }
+                    return false;
+            }
+            return true;
     }
 }
+
 // Criar objeto das perguntas - Tem que arrumar, ta repetindo mta variavel criada antes(deixei assim pq tava dando erro)
 function objPerguntas(){
     const perguntas = document.querySelectorAll(".pergunta");
 
-    for(let j=0; j<perguntas.length; j++){
-        const textoPergunta = perguntas[j].querySelector("input.textoPergunta").value;
-        const corPergunta = perguntas[j].querySelector("input.corPergunta").value;
-        const respostaCorreta = perguntas[j].querySelector("input.respostaCorreta").value;
-        const urlRespostaCorreta = perguntas[j].querySelector("input.urlRespostaCorreta").value;
-        const respostasIncorretas = perguntas[j].querySelectorAll("input.respostaIncorreta");
-        const urlRespostasIncorretas = perguntas[j].querySelectorAll("input.urlRespostaIncorreta");
-        
+    if (verificarPerguntas()){
+        for(let j=0; j<perguntas.length; j++){
+            const textoPergunta = perguntas[j].querySelector("input.textoPergunta").value;
+            const corPergunta = perguntas[j].querySelector("input.corPergunta").value;
+            const respostaCorreta = perguntas[j].querySelector("input.respostaCorreta").value;
+            const urlRespostaCorreta = perguntas[j].querySelector("input.urlRespostaCorreta").value;
+            const respostasIncorretas = perguntas[j].querySelectorAll("input.respostaIncorreta");
+            const urlRespostasIncorretas = perguntas[j].querySelectorAll("input.urlRespostaIncorreta");
+            
 
-        const respostasIncorretasLength = respostasIncorretas.length;
-        const urlRespostasIncorretasLength = urlRespostasIncorretas.length;
+            const respostasIncorretasLength = respostasIncorretas.length;
+            const urlRespostasIncorretasLength = urlRespostasIncorretas.length;
 
-        for (let i=0; i<respostasIncorretasLength;i++){
-            let inputRespostasIncorretas = respostasIncorretas[i].value;
-            let inputUrlIncorretas = urlRespostasIncorretas[i].value;    
+            for (let i=0; i<respostasIncorretasLength;i++){
+                let inputRespostasIncorretas = respostasIncorretas[i].value;
+                let inputUrlIncorretas = urlRespostasIncorretas[i].value;    
 
-            if (inputRespostasIncorretas.length !== 0 && inputUrlIncorretas.length !== 0){
-                arrayInputRespostasIncorretas[i]=inputRespostasIncorretas;
-                arrayInputUrlIncorretas[i]=inputUrlIncorretas;
+                if (inputRespostasIncorretas.length !== 0 && inputUrlIncorretas.length !== 0){
+                    arrayInputRespostasIncorretas[i]=inputRespostasIncorretas;
+                    arrayInputUrlIncorretas[i]=inputUrlIncorretas;
+                }
             }
+    
+            informacoesPerguntas.push({
+                texto: textoPergunta,
+                cor:corPergunta,
+                respCorreta:respostaCorreta,
+                imgRespCorreta:urlRespostaCorreta,
+                respIncorreta:arrayInputRespostasIncorretas,
+                imgRespIncorreta:arrayInputUrlIncorretas
+            })
         }
- 
-        informacoesPerguntas.push({
-            texto: textoPergunta,
-            cor:corPergunta,
-            respCorreta:respostaCorreta,
-            imgRespCorreta:urlRespostaCorreta,
-            respIncorreta:arrayInputRespostasIncorretas,
-            imgRespIncorreta:arrayInputUrlIncorretas
-        })
-    
+        abrirTelaNiveis();
     }
-    
-    console.log(informacoesPerguntas);
-    abrirTelaNiveis()
+  
 }
+
 
 //Para criar os níveis
 let nodeNivel;
@@ -325,7 +313,7 @@ function insertNivel(){
     for(let i = 0; i<nodeNivel.length; i++){
             let nivel = nodeNivel[i];
             
-        // if(verificarNiveis(nivel,i)){
+        if(verificarNiveis(nivel,i)){
             const tituloNivel = nivel.querySelector(".tituloNivel").value;
             const porcentagemAcerto= nivel.querySelector(".porcentagem").value;
             const imgNivel= nivel.querySelector(".imgNivel").value;
@@ -338,17 +326,18 @@ function insertNivel(){
                 descricao:descNivel
             })
 
-        //     if(contadorPorcentagem===nodeNivel.length-1){
-        //         //alert("Para o quiz ficar divertido, tem que haver ao menos um nível com a porcentagem mínima de acerto igual a 0!");
-        //         // alert("Por favor, preencha corretamente!");
-        //         // arrNivel=[];
-        //     break
-        //     }
-        // }else{
-        //     // arrNivel=[];
-        //     // alert("Por favor, preencha corretamente!");
-        //     break
-        // }
+            // if(contadorPorcentagem===nodeNivel.length-1){
+            //     alert("Para o quiz ficar divertido, tem que haver ao menos um nível com a porcentagem mínima de acerto igual a 0!");
+            //      alert("Por favor, preencha corretamente!");
+            //      arrNivel=[];
+            //     break;
+            // }else{
+            //     arrNivel=[];
+            //     alert("Por favor, preencha corretamente!");
+            //     break;
+            // }
+           
+        }
     }
     enviarQuizzApi();
     console.log(arrNivel);
@@ -380,7 +369,7 @@ function verificarNiveis(nivel,numNivel){
         alert(`Um nível legal tem que ter uma descrição com mais de 30 letras! Confira Nível ${numNivel+1}`);
         return false
     }
-    if(porcentagemAcerto!==0){
+    if(parseInt(porcentagemAcerto!==0)){
         contadorPorcentagem+=1;
     }
    return true
@@ -436,10 +425,11 @@ function enviarQuizzApi(){
 }
 
 function quizUsuarioLocalStorage(resposta){
-    const QuizId = resposta.data.id;
-    console.log(QuizId);
+    let quizzId = []
+    quizzId = resposta.data.id;
+    console.log(quizzId);
 
-    localStorage.setItem("IdUsuario", QuizId);
+    localStorage.setItem("IdUsuario", JSON.stringify(quizzId));
     getQuizUsuarioLocalStorage()
 }
 
@@ -454,6 +444,7 @@ function getQuizUsuarioLocalStorage(){
     let stringIds = JSON.stringify(listaIdsUsuario);
     localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
     console.log(listaIdsUsuario);
+    telaSucessoQuizz()
 }
 
 function telaSucessoQuizz(){
