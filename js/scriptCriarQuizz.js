@@ -20,7 +20,7 @@ iniciarApp()
 function iniciarApp(){
     tela1.classList.remove("escondido");
    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
-    console.log(listaIdsUsuario)
+    // console.log(listaIdsUsuario)
     if (!listaIdsUsuario){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
@@ -50,18 +50,19 @@ function getQuizzesId(){
             idOutros.push(response.data[i].id);
         }
         listarTodosQuizzes(response);
-        console.log(idOutros);
+        // console.log(idOutros);
     });
 }
 
-let listaIdsUsuarioMentira=[1203,1206,1275,1244];
+// let listaIdsUsuarioMentira=[1203,1206,1275,1244];
 const backgroundGradient = "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%)";
 
 // Listagem de todos os quizzes
 function listarTodosQuizzes(response){
     console.log(idOutros);
-    console.log(listaIdsUsuarioMentira);
-    console.log(response.data);
+    console.log(listaIdsUsuario);
+    // console.log(response.data);
+    let quizzes = response.data;
 
     document.querySelector(".telaListaQuizzes").innerHTML +=`
         <section class="todosOsQuizzes">
@@ -70,16 +71,20 @@ function listarTodosQuizzes(response){
             </div>
         </section> 
     `
-    for(let j=0;j<idOutros.length;j++){
-        if(!listaIdsUsuarioMentira.includes(idOutros[j])){
+    let numListaIdsUsuario = listaIdsUsuario.map(Number);
+    console.log(numListaIdsUsuario);
+    
+    for(let j=0;j<quizzes.length;j++){
+        if(!numListaIdsUsuario.includes(quizzes[j].id)){
             document.querySelector(".gradeQuizzes").innerHTML += ` 
-                <div id="${response.data[j].id}" class="coverQuiz" onclick="getDataApi(${response.data[j].id})">
-                    <span>"${response.data[j].title}"</span>                    
+                <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
+                    <span>"${quizzes[j].title}"</span>                    
                 </div>
                  `
+        const quizzAtual = document.getElementById(quizzes[j].id);
+        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
+            console.log(!listaIdsUsuario.includes(quizzes[j].id))
         }
-        const quizzAtual = document.getElementById(response.data[j].id);
-        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${response.data[j].image}")`;
     }
 
     listarQuizzesUser();
@@ -89,6 +94,7 @@ function listarTodosQuizzes(response){
 function listarQuizzesUser(){
     listaIdsUsuario.map(getQuizUser);
 }
+let dataQuizz;
 function inserirQuizzUser(response){
     let dataQuizz = response.data;
     document.querySelector(".lista_User").innerHTML +=`
@@ -107,34 +113,42 @@ function exibirQuizz(response){
     tela2.classList.remove("escondido");
     conteudoHTML.classList.add("nextTop");
     const dataQuizz= response.data;
-    const pergunta = dataQuizz.questions;
-    const resposta = pergunta.answers;
-    tela2.innerHTML =`
-    <div class="topo_Quiz">
-        <div class="blackCover"> </div>
-        <div class="img_Quiz"><img src="${dataQuizz.image}"/></div>
-        <div class="titulo_Quiz"><h2>${dataQuizz.title}</h2></div>
-    </div>
-    <div class="render-perguntas"> </div>
-    `;
-    for(let i = 0 ; i<pergunta.length; i++){
-        const renderPerguntas = tela2.querySelector(".render-perguntas")
-        renderPerguntas.innerHTML +=`
-        <div class="question">
-            <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3>
-            <div class="caixa-respostas">
-                <div class="resposta">
-        </div>
-        `
-        for(let i=0; i<2; i++){
-            const respostas= renderPerguntas.querySelector(".resposta")
-            
-            respostas.innerHTML += `
-            <img src="${pergunta.answers[i].image}"/>
-            <h4> ${pergunta.answers[i].text}</h4>
-            `
+
+    for(let i = 0; i < dataQuizz.questions.length; i++) {
+        const pergunta = dataQuizz.questions[i].answers;
+          
+        console.log(pergunta);
+        console.log(dataQuizz);
+        // const resposta = pergunta.answers;
         
-        }
+        tela2.innerHTML =`
+        <div class="topo_Quiz">
+            <div class="blackCover"> </div>
+            <div class="img_Quiz"><img src="${dataQuizz.image}"/></div>
+            <div class="titulo_Quiz"><h2>${dataQuizz.title}</h2></div>
+        </div>
+        <div class="render-perguntas"> </div>
+        `;
+
+        for(let j = 0 ; j<pergunta.length; j++){
+            const renderPerguntas = tela2.querySelector(".render-perguntas")
+            renderPerguntas.innerHTML +=`
+            <div class="question">
+                <div class="caixa-pergunta" style="background-color:${pergunta[j].color}"> <h3>${pergunta[j].title}</h3>
+                <div class="caixa-respostas">
+                    <div class="resposta">
+            </div>
+            `
+            // for(let i=0; i<2; i++){
+                const respostas= renderPerguntas.querySelector(".resposta");
+                
+                respostas.innerHTML += `
+                <img src="${pergunta[j].image}"/>
+                <h4> ${pergunta[j].text}</h4>
+                `
+            
+                // }
+            }
     }
 }
 

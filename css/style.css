@@ -599,6 +599,11 @@ margin-bottom: 40px;
     height: 138px;
 }
 
+.resposta img{
+    width: 40px;
+    height: 40px;
+}
+
 /* Versão Mobile */
 @media (max-width:1100px){
 
@@ -619,7 +624,7 @@ margin-bottom: 40px;
 
     /* Seus quizzes */
     .seusQuizzes{
-        width: 360px;
+        width: 350px;
         margin:69px 17px;
         flex-wrap: wrap;
      }
