@@ -108,7 +108,7 @@ function exibirQuizz(response){
     conteudoHTML.classList.add("nextTop");
     const dataQuizz= response.data;
     const pergunta = dataQuizz.questions;
-    const resposta = pergunta.answers;
+    
     tela2.innerHTML =`
     <div class="topo_Quiz">
         <div class="blackCover"> </div>
@@ -121,17 +121,21 @@ function exibirQuizz(response){
         const renderPerguntas = tela2.querySelector(".render-perguntas")
         renderPerguntas.innerHTML +=`
         <div class="question">
-            <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3>
-            <div class="caixa-respostas">
-                <div class="resposta">
+            <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3> </div>
+            <div class="caixa-respostas" id="pergunta${i}">
+                
+            </div>
         </div>
         `
-        for(let i=0; i<2; i++){
-            const respostas= renderPerguntas.querySelector(".resposta")
+        const resposta = pergunta[i].answers;
+        for(let j=0; j<resposta.length; j++){
+            const respostas= document.getElementById(`pergunta${i}`)
             
             respostas.innerHTML += `
-            <img src="${pergunta.answers[i].image}"/>
-            <h4> ${pergunta.answers[i].text}</h4>
+            <div class="resposta" > 
+                <img src="${resposta[j].image}"/>
+                <h4> ${resposta[j].text}</h4>
+            </div>
             `
         
         }
