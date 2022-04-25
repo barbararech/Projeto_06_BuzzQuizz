@@ -100,12 +100,14 @@ h1{
     width: 100%;
 }
 
-.seusQuizzesHeader h3{
+.seusQuizzesHeader h3, .todosOsQuizzes h3{
     font-size: 20px;
     font-weight: 700;
-    margin-right: 17px;
+    /* margin-right: 17px; */
     margin-bottom: 0;
 }
+
+
 h2{
     font-size: 20px;
     font-weight: 700;
@@ -137,7 +139,6 @@ h2{
      flex-wrap: wrap;
      width: 340px;
      height: 181px;
-     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url('/images/gato.jpg');
      background-repeat: no-repeat;
      border-radius: 5px;
      background-size: cover;
@@ -148,6 +149,7 @@ h2{
  }
 
  .gradeQuizzes{
+     overflow-x: hidden;;
      display: grid;
      gap: 10px 20px;
      margin-top: 12px; 
@@ -158,7 +160,7 @@ h2{
  span {
      display: flex;
      white-space:pre-wrap;
-     word-wrap: break-word;
+     word-break:break-all;
      text-align:start;
      color: #ffffff;
      font-weight: 400;

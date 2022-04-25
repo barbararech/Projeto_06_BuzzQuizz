@@ -1,8 +1,8 @@
 
 //Variáveis Globais
-let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
+//  let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const conteudoHTML= document.querySelector(".conteudo") // criei pra ficar limpando o html ao inves de ligar de desligar o "escondido"
-// let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
+
 const tela1 = document.querySelector(".telaListaQuizzes");
 const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
@@ -18,9 +18,9 @@ function inicio(){
 iniciarApp()
 function iniciarApp(){
     tela1.classList.remove("escondido");
-    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
-
-    if (listaIdsUsuario.length === 0){
+    //  let listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
+    console.log(listaIdsUsuario)
+    if (!listaIdsUsuario){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
                 <div class="infoSemQuizz">Você não criou nenhum quizz ainda :(</div>
@@ -37,19 +37,57 @@ function iniciarApp(){
             </section>
         `
     }
-    listarTodosQuizzes();
+    getQuizzesId();
 }
+
+// Pegar idQuizzes dos outros
+let idOutros = [];
+
+function getQuizzesId(){
+    const promise = axios.get("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes");
+    promise.then(function(response){
+        for (let i = 0; i < response.data.length; i++) {
+            idOutros.push(response.data[i].id);
+        }
+        listarTodosQuizzes(response)
+        console.log(idOutros);
+    });
+}
+
+let listaIdsUsuarioMentira=[1203,1206];
+const backgroundGradient = "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%)";
+
 // Listagem de todos os quizzes
-function listarTodosQuizzes(){
-    document.querySelector(".telaListaQuizzes").innerHTML += ` <section class="todosOsQuizzes">
-    <h2>Todos os Quizzes</h2>
-    <div class="gradeQuizzes">
-        <div class="coverQuiz" onclick="abrirTelaQuizz()">
-            <span>gatoatogatogatogatogatogato gatogato</span>                    
-        </div>
-    </div>
-</section>`
+function listarTodosQuizzes(response){
+    console.log(idOutros);
+    console.log(listaIdsUsuarioMentira);
+    console.log(response.data);
+
+    document.querySelector(".telaListaQuizzes").innerHTML +=`
+        <section class="todosOsQuizzes">
+            <h3>Todos os Quizzes</h3>
+            <div class="gradeQuizzes">
+            </div>
+        </section> 
+    `
+
+    for(let j=0;j<idOutros.length;j++){
+        for (let i=0;i<listaIdsUsuarioMentira.length;i++){
+            if(idOutros[j] !== listaIdsUsuarioMentira[i]){
+
+                 document.querySelector(".gradeQuizzes").innerHTML += ` 
+                         <div id="${response.data[j].id}" class="coverQuiz" onclick="abrirTelaQuizz()">
+                             <span>"${response.data[j].title}"</span>                    
+                         </div>
+                 `
+                 const quizzAtual = document.getElementById(response.data[j].id);
+                 quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${response.data[j].image}")`;
+            }
+        }
+        
+    }
 }
+
 
 // Abrir tela do quizz
 function abrirTelaQuizz(){
@@ -459,13 +497,11 @@ function quizUsuarioLocalStorage(resposta){
 
     localStorage.setItem("IdUsuario", JSON.stringify(quizzId));
     getQuizUsuarioLocalStorage();
-    pedirQuizzData()
 }
 
 
 // Pegar os Ids do usuário
 function getQuizUsuarioLocalStorage(){
-
     listaIdsUsuario.push(localStorage.getItem("IdUsuario"));
     console.log(listaIdsUsuario);
 
@@ -473,10 +509,10 @@ function getQuizUsuarioLocalStorage(){
     localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
     listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
     console.log(listaIdsUsuario);
+    pedirQuizzData()
 }
 
-function pedirQuizzData(){
-  
+function pedirQuizzData(){ 
     const ultimoID= listaIdsUsuario[listaIdsUsuario.length-1];
     const promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${ultimoID}`)
     promise.then(telaSucessoQuizz)
@@ -495,7 +531,7 @@ function telaSucessoQuizz(response){
                     <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
                 </div>
                 <div class="botoes">
-                    <button class="acessoQuiz"><h5 class="branco">Acessar quizz</h5></button>
+                    <button class="acessoQuiz" onclick="abrirTelaQuizz()"><h5 class="branco">Acessar quizz</h5></button>
                     <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
                 </div>
     </div>
