@@ -20,7 +20,7 @@ iniciarApp()
 function iniciarApp(){
     tela1.classList.remove("escondido");
    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
-    console.log(listaIdsUsuario)
+    // console.log(listaIdsUsuario)
     if (!listaIdsUsuario){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
@@ -50,18 +50,19 @@ function getQuizzesId(){
             idOutros.push(response.data[i].id);
         }
         listarTodosQuizzes(response);
-        console.log(idOutros);
+        // console.log(idOutros);
     });
 }
 
-let listaIdsUsuarioMentira=[1203,1206,1275,1244];
+// let listaIdsUsuarioMentira=[1203,1206,1275,1244];
 const backgroundGradient = "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%)";
 
 // Listagem de todos os quizzes
 function listarTodosQuizzes(response){
     console.log(idOutros);
-    console.log(listaIdsUsuarioMentira);
-    console.log(response.data);
+    console.log(listaIdsUsuario);
+    // console.log(response.data);
+    let quizzes = response.data;
 
     document.querySelector(".telaListaQuizzes").innerHTML +=`
         <section class="todosOsQuizzes">
@@ -70,16 +71,20 @@ function listarTodosQuizzes(response){
             </div>
         </section> 
     `
-    for(let j=0;j<idOutros.length;j++){
-        if(!listaIdsUsuarioMentira.includes(idOutros[j])){
+    let numListaIdsUsuario = listaIdsUsuario.map(Number);
+    console.log(numListaIdsUsuario);
+    
+    for(let j=0;j<quizzes.length;j++){
+        if(!numListaIdsUsuario.includes(quizzes[j].id)){
             document.querySelector(".gradeQuizzes").innerHTML += ` 
-                <div id="${response.data[j].id}" class="coverQuiz" onclick="getDataApi(${response.data[j].id})">
-                    <span>"${response.data[j].title}"</span>                    
+                <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
+                    <span>"${quizzes[j].title}"</span>                    
                 </div>
                  `
+        const quizzAtual = document.getElementById(quizzes[j].id);
+        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
+            console.log(!listaIdsUsuario.includes(quizzes[j].id))
         }
-        const quizzAtual = document.getElementById(response.data[j].id);
-        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${response.data[j].image}")`;
     }
 
     listarQuizzesUser();
@@ -89,6 +94,7 @@ function listarTodosQuizzes(response){
 function listarQuizzesUser(){
     listaIdsUsuario.map(getQuizUser);
 }
+let dataQuizz;
 function inserirQuizzUser(response){
     let dataQuizz = response.data;
     document.querySelector(".lista_User").innerHTML +=`
@@ -137,8 +143,7 @@ function exibirQuizz(response){
                 <h4> ${resposta[j].text}</h4>
             </div>
             `
-        
-        }
+            }
     }
 }
 
