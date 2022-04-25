@@ -8,6 +8,7 @@ const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
+const listaUser= document.querySelector(".lista_User");
 let listaIdsUsuario = [];
 
 function inicio(){
@@ -21,14 +22,14 @@ function iniciarApp(){
     listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
 
     if (listaIdsUsuario.length === 0){
-        document.querySelector(".telaListaQuizzes").innerHTML += `
+        document.querySelector(".seusQuizes").innerHTML += `
             <div class="criarQuizz">
                 <div class="infoSemQuizz">Você não criou nenhum quizz ainda :(</div>
                 <button type="button" onclick="abrirTelaInfo()">Criar Quizz</button> 
             </div>
         `
     } else{
-        document.querySelector(".telaListaQuizzes").innerHTML += `
+        document.querySelector(".seusQuizes").innerHTML += `
             <section class="seusQuizzes">
                 <div class="seusQuizzesHeader">
                     <h3>Seus Quizzes</h3>
@@ -38,17 +39,79 @@ function iniciarApp(){
         `
     }
     listarTodosQuizzes();
+    listarQuizzesUser();
 }
+//Listagem de Quizzes do User
+function listarQuizzesUser(){
+    listaIdsUsuario.map(getQuizUser);
+}
+
+function inserirQuizzUser(response){
+    let dataQuizz = response.data;
+    document.querySelector(".lista_User").innerHTML +=`
+<div class="home_quizz" onclick="getDataApi(${dataQuizz.id})">
+    <img src=${dataQuizz.image} alt="Imagem principal do seu Quizz">
+    <div class="blackCover"></div>
+    <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
+</div>
+</div>
+
+`
+}
+
 // Listagem de todos os quizzes
 function listarTodosQuizzes(){
     document.querySelector(".telaListaQuizzes").innerHTML += ` <section class="todosOsQuizzes">
-    <h2>Todos os Quizzes</h2>
+    <h3>Todos os Quizzes</h>
     <div class="gradeQuizzes">
         <div class="coverQuiz" onclick="abrirTelaQuizz()">
             <span>gatoatogatogatogatogatogato gatogato</span>                    
         </div>
     </div>
-</section>`
+</section>`;
+}
+
+//Exibir Quizz
+
+function exibirQuizz(response){
+    tela1.classList.add("escondido");
+    tela2.classList.remove("escondido");
+    conteudoHTML.classList.add("nextTop");
+    const dataQuizz= response.data;
+    const pergunta = dataQuizz.questions;
+    const resposta = pergunta.answers;
+    tela2.innerHTML =`
+    <div class="topo_Quiz">
+        <div class="blackCover"> </div>
+        <div class="img_Quiz"><img src="${dataQuizz.image}"/></div>
+        <div class="titulo_Quiz"><h2>${dataQuizz.title}</h2></div>
+    </div>
+    <div class="render-perguntas"> </div>
+    `;
+    for(let i = 0 ; i<pergunta.length; i++){
+        const renderPerguntas = tela2.querySelector(".render-perguntas")
+        renderPerguntas.innerHTML +=`
+        <div class="question">
+            <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3>
+            <div class="caixa-respostas">
+                <div class="resposta">
+        </div>
+        `
+        for(let i=0; i<2; i++){
+            const respostas= renderPerguntas.querySelector(".resposta")
+            
+            respostas.innerHTML += `
+            <img src="${pergunta.answers[i].image}"/>
+            <h4> ${pergunta.answers[i].text}</h4>
+            `
+        
+        }
+    }
+}
+
+function getDataApi(id){
+    let promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`);
+    promise.then(exibirQuizz);
 }
 
 // Abrir tela do quizz
@@ -78,7 +141,7 @@ function abrirTelaInfo(){
 //Função de inserir as Infos do Quizz
 let informacoesBasicas= {};
 function insertInfoQuizz(){
-    const titulo=document.querySelector("input.titulo").value
+    const titulo=document.querySelector("input.titulo").value;
     const imgQuizz=document.querySelector("input.url_Img").value;
     const qntPergunta=document.querySelector("input.qnt_perguntas").value;
     const qntNiveis=document.querySelector("input.qnt_niveis").value;
@@ -491,7 +554,7 @@ function telaSucessoQuizz(response){
                 </div>
                 <div class="preview_Quizz">
                     <img src=${dataQuizz.image} alt="Imagem principal do seu Quizz">
-                    <div class="degrade_background"></div>
+                    <div class="blackCover"></div>
                     <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
                 </div>
                 <div class="botoes">
@@ -502,3 +565,5 @@ function telaSucessoQuizz(response){
     `
     alert("Deu boa");
 }
+
+
