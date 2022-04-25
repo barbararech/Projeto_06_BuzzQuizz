@@ -113,42 +113,65 @@ function exibirQuizz(response){
     tela2.classList.remove("escondido");
     conteudoHTML.classList.add("nextTop");
     const dataQuizz= response.data;
-
-    for(let i = 0; i < dataQuizz.questions.length; i++) {
-        const pergunta = dataQuizz.questions[i].answers;
-          
-        console.log(pergunta);
-        console.log(dataQuizz);
-        // const resposta = pergunta.answers;
-        
-        tela2.innerHTML =`
-        <div class="topo_Quiz">
-            <div class="blackCover"> </div>
-            <div class="img_Quiz"><img src="${dataQuizz.image}"/></div>
-            <div class="titulo_Quiz"><h2>${dataQuizz.title}</h2></div>
+    const pergunta = dataQuizz.questions;
+    
+    tela2.innerHTML =`
+    <div class="topo_Quiz">
+        <div class="blackCover"> </div>
+        <div class="img_Quiz"><img src="${dataQuizz.image}"/></div>
+        <div class="titulo_Quiz"><h2>${dataQuizz.title}</h2></div>
+    </div>
+    <div class="render-perguntas"> </div>
+    `;
+    for(let i = 0 ; i<pergunta.length; i++){
+        const renderPerguntas = tela2.querySelector(".render-perguntas")
+        renderPerguntas.innerHTML +=`
+        <div class="question">
+            <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3> </div>
+            <div class="caixa-respostas" id="pergunta${i}">
+                
+            </div>
         </div>
-        <div class="render-perguntas"> </div>
-        `;
-
-        for(let j = 0 ; j<pergunta.length; j++){
-            const renderPerguntas = tela2.querySelector(".render-perguntas")
-            renderPerguntas.innerHTML +=`
-            <div class="question">
-                <div class="caixa-pergunta" style="background-color:${pergunta[j].color}"> <h3>${pergunta[j].title}</h3>
-                <div class="caixa-respostas">
-                    <div class="resposta">
+        `
+        const resposta = pergunta[i].answers.sort(arrayAleatorio);
+        for(let j=0; j<resposta.length; j++){
+            const respostas= document.getElementById(`pergunta${i}`)
+            
+            respostas.innerHTML += `
+            <div class="resposta ${resposta[j].isCorrectAnswer}" onclick="comportamentoRespostas(this)" > 
+                <img src="${resposta[j].image}"/>
+                <h4> ${resposta[j].text}</h4>
             </div>
             `
-            // for(let i=0; i<2; i++){
-                const respostas= renderPerguntas.querySelector(".resposta");
-                
-                respostas.innerHTML += `
-                <img src="${pergunta[j].image}"/>
-                <h4> ${pergunta[j].text}</h4>
-                `
-            
-                // }
             }
+    }
+}
+
+function arrayAleatorio() {
+    return (Math.random() - 0.5);
+}
+
+// Comportamento respostas
+function comportamentoRespostas(element){
+    let respostas = element.parentNode.querySelectorAll(".resposta");
+
+    for (let i=0;i<respostas.length;i++){
+        let divRespostas = respostas[i];
+        respostas[i].removeAttribute("onclick");
+        console.log(divRespostas);
+
+        if(divRespostas.classList.contains("true")){
+            divRespostas.classList.add("colortrue");
+            // console.log(divRespostas);
+        } else{
+            divRespostas.classList.add("colorfalse");
+        }
+
+        if(element !== divRespostas){
+            divRespostas.classList.add("naoselecionado");
+        }
+
+        // setTimeout(function(){pergunta[i].scrollIntoView()},2000);
     }
 }
 
