@@ -19,7 +19,7 @@ function inicio(){
 iniciarApp()
 function iniciarApp(){
     tela1.classList.remove("escondido");
-    //  let listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
+   listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
     console.log(listaIdsUsuario)
     if (!listaIdsUsuario){
         document.querySelector(".telaListaQuizzes").innerHTML += `
@@ -54,7 +54,7 @@ function getQuizzesId(){
     });
 }
 
-let listaIdsUsuarioMentira=[1203,1206];
+let listaIdsUsuarioMentira=[1203,1206,1275,1244];
 const backgroundGradient = "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%)";
 
 // Listagem de todos os quizzes
@@ -70,23 +70,18 @@ function listarTodosQuizzes(response){
             </div>
         </section> 
     `
-
     for(let j=0;j<idOutros.length;j++){
-        for (let i=0;i<listaIdsUsuarioMentira.length;i++){
-            if(idOutros[j] !== listaIdsUsuarioMentira[i]){
-
-                 document.querySelector(".gradeQuizzes").innerHTML += ` 
-                         <div id="${response.data[j].id}" class="coverQuiz" onclick="abrirTelaQuizz()">
-                             <span>"${response.data[j].title}"</span>                    
-                         </div>
+        if(!listaIdsUsuarioMentira.includes(idOutros[j])){
+            document.querySelector(".gradeQuizzes").innerHTML += ` 
+                <div id="${response.data[j].id}" class="coverQuiz" onclick="getDataApi(${response.data[j].id})">
+                    <span>"${response.data[j].title}"</span>                    
+                </div>
                  `
-                 const quizzAtual = document.getElementById(response.data[j].id);
-                 quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${response.data[j].image}")`;
-            }
         }
-        
+        const quizzAtual = document.getElementById(response.data[j].id);
+        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${response.data[j].image}")`;
     }
-    
+
     listarQuizzesUser();
 }
 
@@ -557,7 +552,6 @@ function quizUsuarioLocalStorage(resposta){
 
     localStorage.setItem("IdUsuario", JSON.stringify(quizzId));
     getQuizUsuarioLocalStorage();
-    pedirQuizzData()
 }
 
 
@@ -570,6 +564,7 @@ function getQuizUsuarioLocalStorage(){
     localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
     listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
     console.log(listaIdsUsuario);
+    pedirQuizzData()
 }
 
 function pedirQuizzData(){ 
