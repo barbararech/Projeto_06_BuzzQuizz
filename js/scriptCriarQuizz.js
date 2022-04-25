@@ -2,7 +2,6 @@
 //Variáveis Globais
 //  let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const conteudoHTML= document.querySelector(".conteudo") // criei pra ficar limpando o html ao inves de ligar de desligar o "escondido"
-
 const tela1 = document.querySelector(".telaListaQuizzes");
 const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
@@ -10,6 +9,10 @@ const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
 const listaUser= document.querySelector(".lista_User");
 let listaIdsUsuario = [];
+
+function comparador() { 
+	return Math.random() - 0.5; 
+}
 
 function inicio(){
     window.location.reload(true);
@@ -134,9 +137,10 @@ function exibirQuizz(response){
         </div>
         `
         const resposta = pergunta[i].answers;
+        resposta.sort(comparador);
         for(let j=0; j<resposta.length; j++){
             const respostas= document.getElementById(`pergunta${i}`)
-            
+           
             respostas.innerHTML += `
             <div class="resposta" > 
                 <img src="${resposta[j].image}"/>
