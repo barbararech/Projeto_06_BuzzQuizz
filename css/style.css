@@ -320,7 +320,7 @@ h5{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 38px;
+    margin-top: 63px;
     margin-bottom: 30px;
 
 }
@@ -718,5 +718,8 @@ margin-bottom: 40px;
      .todosOsQuizzes, .containerListas{
         width: 340px;
      }
-
+    
+     .telaCriarPerguntas > h3{
+        margin-top: 38px;
+     }
 }
