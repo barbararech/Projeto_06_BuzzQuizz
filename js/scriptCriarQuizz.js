@@ -59,8 +59,8 @@ const backgroundGradient = "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, r
 
 // Listagem de todos os quizzes
 function listarTodosQuizzes(response){
-    console.log(idOutros);
-    console.log(listaIdsUsuario);
+    // console.log(idOutros);
+    // console.log(listaIdsUsuario);
     // console.log(response.data);
     let quizzes = response.data;
 
@@ -71,19 +71,32 @@ function listarTodosQuizzes(response){
             </div>
         </section> 
     `
-    let numListaIdsUsuario = listaIdsUsuario.map(Number);
-    console.log(numListaIdsUsuario);
-    
-    for(let j=0;j<quizzes.length;j++){
-        if(!numListaIdsUsuario.includes(quizzes[j].id)){
+    if (!listaIdsUsuario){
+        for(let j=0;j<quizzes.length;j++){
             document.querySelector(".gradeQuizzes").innerHTML += ` 
                 <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
                     <span>"${quizzes[j].title}"</span>                    
                 </div>
                  `
-        const quizzAtual = document.getElementById(quizzes[j].id);
-        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
-            console.log(!listaIdsUsuario.includes(quizzes[j].id))
+            const quizzAtual = document.getElementById(quizzes[j].id);
+            quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
+        }
+    } else{
+
+        let numListaIdsUsuario = listaIdsUsuario.map(Number);
+        console.log(numListaIdsUsuario);
+        
+        for(let j=0;j<quizzes.length;j++){
+            if(!numListaIdsUsuario.includes(quizzes[j].id)){
+                document.querySelector(".gradeQuizzes").innerHTML += ` 
+                    <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
+                        <span>"${quizzes[j].title}"</span>                    
+                    </div>
+                    `
+            const quizzAtual = document.getElementById(quizzes[j].id);
+            quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
+                console.log(!listaIdsUsuario.includes(quizzes[j].id))
+            }
         }
     }
 
@@ -94,6 +107,7 @@ function listarTodosQuizzes(response){
 function listarQuizzesUser(){
     listaIdsUsuario.map(getQuizUser);
 }
+
 let dataQuizz;
 function inserirQuizzUser(response){
     let dataQuizz = response.data;
@@ -143,8 +157,13 @@ function exibirQuizz(response){
                 <h4> ${resposta[j].text}</h4>
             </div>
             `
-            }
+        }
+
     }
+    tela2.innerHTML += ` <div class="botoes">
+    <button class="acessoQuiz" onclick="reiniciarQuizz()"><h5 class="branco">Reiniciar Quizz</h5></button>
+    <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
+    </div>`
     setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
@@ -168,8 +187,6 @@ function comportamentoRespostas(element){
 
         if(divRespostas.classList.contains("true")){
             divRespostas.classList.add("colortrue");
-            // console.log(divRespostas.parentNode)
-            // console.log(divRespostas);
         } else{
             divRespostas.classList.add("colorfalse");
         }
@@ -177,38 +194,41 @@ function comportamentoRespostas(element){
         if(element !== divRespostas){
             divRespostas.classList.add("naoselecionado");
         }
-
-       
     }
         
     setTimeout(scrollProxPergunta,2000);
 }
 
 function scrollProxPergunta(){
-    let perguntas = document.querySelectorAll(".question");
-    console.log(perguntas);
-    for(let i=0;i<perguntas.length;i++){
-        let pergunta = perguntas[i].childNodes.item(3);
-        let perguntaRespondida = pergunta.classList.contains("respondido");
-        console.log(pergunta);
-        console.log(perguntaRespondida);
-        
-
-        if(perguntaRespondida && perguntas[i+1] !== undefined){
-            perguntas.nextElementSibling.scrollIntoView({behavior:"smooth"});
+    const perguntas = document.querySelectorAll(".question");
+    // console.log(perguntas);
+    for(let i=0;i<perguntas.length-1;i++){
+        if(perguntas[i].lastElementChild.classList.contains("respondido")){
+            perguntas[i+1].scrollIntoView({behavior:"smooth"});
         }
-    }
+    }  
+}
 
-    // const perguntas = document.querySelectorAll(".question");
-    // for(let i=0;i<perguntas.length;i++){
-    //     console.log(perguntas);
-    //     console.log(perguntas[i]);
-    //     if(perguntas[i].classList.contains("respondido") && perguntas[i+1] !== undefined){
-    //         perguntas[i+1].scrollIntoView({behavior:"smooth"});
-    //         console.log(perguntas[i+1]);
-    //     }
-    // }  
- 
+function reiniciarQuizz(){
+    setTimeout(function(){
+        window.scrollTo(0, 0);
+
+        let respostas = document.querySelectorAll(".resposta");
+
+        for (let i=0;i<respostas.length;i++){
+            let divRespostas = respostas[i];
+            divRespostas.parentNode.classList.remove("respondido")
+            divRespostas.setAttribute("onclick", "comportamentoRespostas(this)");
+
+            if(divRespostas.classList.contains("true")){
+                divRespostas.classList.remove("colortrue");
+            } else{
+                divRespostas.classList.remove("colorfalse");
+            }
+        
+            divRespostas.classList.remove("naoselecionado");
+        }
+    },2000);
 }
 
 function getDataApi(id){
@@ -336,7 +356,7 @@ function criarPerguntas(){
     } while (i<qntPergunta);
 
     document.querySelector(".telaCriarPerguntas").innerHTML += pergunta;
-    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="objPerguntas()">Prosseguir para criar níveis</button>`
+    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoGeral" onclick="objPerguntas()">Prosseguir para criar níveis</button>`
     colapsarSecao();
 }
 
@@ -484,6 +504,8 @@ function abrirTelaNiveis(){
                 <div class="nivel">
                     <button type="button" class="buttonReadMore">
                         <h4>Nivel ${i}</h4>
+                        <ion-icon class="iconeReadMore" name="create-outline" >
+                        </ion-icon>
                     </button>
                 <div class="container">
                     <input id="inputPergunta" class="tituloNivel" type="text" placeholder="Título do nível">
@@ -494,7 +516,7 @@ function abrirTelaNiveis(){
                 </div>     
                 `
 }
-    tela5.innerHTML += `<button class="botaoIrParaNiveis" onclick="finalizarNivel()">Finalizar Quizz</button>`
+    tela5.innerHTML += `<button class="botaoGeral" onclick="finalizarNivel()">Finalizar Quizz</button>`
     nodeNivel=document.querySelectorAll(".nivel")
     colapsarSecao()
 }

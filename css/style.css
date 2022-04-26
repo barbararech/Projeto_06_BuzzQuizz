@@ -275,15 +275,13 @@ input::placeholder{
 /* Tela Criar Perguntas */
 .telaCriarPerguntas{
     width: 100%;
-    height: 100%;
-    position: relative;
-    /* top: 0;
-    left: 0; */
-    margin-top: 38px;
+    position: absolute;
+    top: 0;
+    left: 0; 
+    margin-top: 69px;
     margin-bottom: 80px;
     background-color: #fafafa;
-    z-index: 2;
-    
+    z-index: 1;
 }
 
 h3{
@@ -294,13 +292,13 @@ h3{
 h4{
     font-size: 20px;
     font-weight: 700;
-
 }
+
 h5{
     font-size: 21px;
 }
 
-.telaCriarPerguntas > h4{
+.telaCriarPerguntas > h3{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,19 +306,23 @@ h5{
     margin-bottom: 30px;
 
 }
+.telaCriarPerguntas h4, .telaCriarNivel h4{
+    margin-top: 28px;
+}
 
 .telaCriarPerguntas{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 /* Caixa de Input Pergunta e Nivel */
 .pergunta,.nivel{
-    width: 100%;
-    max-width: 600px;
+    width: 600px;
+    /* max-width: 600px; */
     background-color: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
-    padding: 0 18px;
+    padding: 0px 18px;
     margin-bottom: 30px; 
     position: relative;
 }
@@ -338,6 +340,7 @@ button{
     background-color: rgba(0, 0, 0, 0.0);
     border: none;
     margin-bottom: 28px; 
+    height:54px;
 }
 /* Decoração dos Input */
 #inputPergunta, #inputNivelDesc{
@@ -383,7 +386,7 @@ input::placeholder{
     cursor: pointer;
 }
 
-.botaoIrParaNiveis{
+.botaoGeral{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -396,6 +399,19 @@ input::placeholder{
     font-weight: 400;
     color: #fff5f4;
 }
+/* 
+cursor: pointer;
+margin-top: 85px;
+max-width: 378px;
+width: 100%;
+min-width: 300px;
+height: 54px;
+background-color: #EC362D;
+border-radius: 15px;
+border: none;
+display: flex;
+justify-content: center;
+align-items: center; */
 /* Tela Criar Nivel */
 .telaCriarNivel{
     margin-top: 80px;
@@ -585,13 +601,14 @@ margin-bottom: 40px;
     width:100%;
     min-width: 400px;
     height: fit-content;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   padding-top: 20px;
-    margin-bottom: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    margin-bottom: 42px;
 }
+
 .caixa-pergunta{
     display: flex;
     justify-content: center;
@@ -604,9 +621,6 @@ margin-bottom: 40px;
     color: #ffffff;
     mix-blend-mode: difference;
 }
-
-
-
 
 /* caixa de resposta */
 
@@ -632,7 +646,7 @@ margin-bottom: 40px;
     grid-template-rows: repeat(auto-fill, minmax(230px, auto));
     row-gap: 10px;
     column-gap: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 0px;
 }
 
 .resposta img{
@@ -678,7 +692,7 @@ margin-bottom: 40px;
         margin-right: 0px;
     }  
     
-    .botaoIrParaNiveis{
+    .botaoGeral{
         margin-top: 46px;
     }
 
