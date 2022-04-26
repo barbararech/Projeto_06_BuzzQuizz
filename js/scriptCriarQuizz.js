@@ -7,11 +7,11 @@ const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
-const tela6 = document.querySelector(".telaFimDoQuizz")
+const tela6 = document.querySelector(".telaFimDoQuizz");
 const listaUser= document.querySelector(".lista_User");
 let listaIdsUsuario = [];
-let counterRespostasClick=0;
-let counterAcertos=0;
+let acertouResposta=0;
+let questaoRespondida=0;
 let levelUsuario;
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -65,8 +65,8 @@ const backgroundGradient = "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, r
 
 // Listagem de todos os quizzes
 function listarTodosQuizzes(response){
-    console.log(idOutros);
-    console.log(listaIdsUsuario);
+    // console.log(idOutros);
+    // console.log(listaIdsUsuario);
     // console.log(response.data);
     let quizzes = response.data;
 
@@ -77,19 +77,32 @@ function listarTodosQuizzes(response){
             </div>
         </section> 
     `
-    let numListaIdsUsuario = listaIdsUsuario.map(Number);
-    console.log(numListaIdsUsuario);
-    
-    for(let j=0;j<quizzes.length;j++){
-        if(!numListaIdsUsuario.includes(quizzes[j].id)){
+    if (!listaIdsUsuario){
+        for(let j=0;j<quizzes.length;j++){
             document.querySelector(".gradeQuizzes").innerHTML += ` 
                 <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
                     <span>"${quizzes[j].title}"</span>                    
                 </div>
                  `
-        const quizzAtual = document.getElementById(quizzes[j].id);
-        quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
-            console.log(!listaIdsUsuario.includes(quizzes[j].id))
+            const quizzAtual = document.getElementById(quizzes[j].id);
+            quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
+        }
+    } else{
+
+        let numListaIdsUsuario = listaIdsUsuario.map(Number);
+        console.log(numListaIdsUsuario);
+        
+        for(let j=0;j<quizzes.length;j++){
+            if(!numListaIdsUsuario.includes(quizzes[j].id)){
+                document.querySelector(".gradeQuizzes").innerHTML += ` 
+                    <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
+                        <span>"${quizzes[j].title}"</span>                    
+                    </div>
+                    `
+            const quizzAtual = document.getElementById(quizzes[j].id);
+            quizzAtual.style.backgroundImage = `${backgroundGradient}, url("${quizzes[j].image}")`;
+                console.log(!listaIdsUsuario.includes(quizzes[j].id))
+            }
         }
     }
 
@@ -100,6 +113,7 @@ function listarTodosQuizzes(response){
 function listarQuizzesUser(){
     listaIdsUsuario.map(getQuizUser);
 }
+
 let dataQuizz;
 function inserirQuizzUser(response){
     let dataQuizz = response.data;
@@ -135,7 +149,7 @@ function exibirQuizz(response){
         renderPerguntas.innerHTML +=`
         <div class="question">
             <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3> </div>
-            <div class="caixa-respostas" id="pergunta${i}" onclick="scrolar(this)" >     
+            <div class="caixa-respostas" id="pergunta${i}">     
             </div>
         </div>
         `
@@ -149,7 +163,8 @@ function exibirQuizz(response){
                 <h4> ${resposta[j].text}</h4>
             </div>
             `
-            }
+        }
+
     }
     setTimeout(scrollPrimeiraPergunta(),2000);
 }
@@ -163,11 +178,15 @@ function scrollPrimeiraPergunta() {
 }
 
 // Comportamento respostas
+let qtdQuestoes;
 function comportamentoRespostas(element){
     let respostas = element.parentNode.querySelectorAll(".resposta");
-    const totalPerguntas = document.querySelectorAll(".question")
-    const respostaCerta = element.querySelector(".true")
-    counterRespostasClick+=1;
+    const respostaCerta = element.parentElement.querySelector(".true")
+    qtdQuestoes= document.querySelectorAll(".question");
+    questaoRespondida+=1
+    console.log(respostaCerta);
+    console.log(element);
+    
     for (let i=0;i<respostas.length;i++){
         let divRespostas = respostas[i];
         divRespostas.parentNode.classList.add("respondido")
@@ -175,62 +194,61 @@ function comportamentoRespostas(element){
 
         if(divRespostas.classList.contains("true")){
             divRespostas.classList.add("colortrue");
-            // console.log(divRespostas.parentNode)
-            // console.log(divRespostas);
+            
         } else{
             divRespostas.classList.add("colorfalse");
         }
     
         if(element !== divRespostas){
             divRespostas.classList.add("naoselecionado");
-        }       
-        /* console.log(pergunta[i])
-        setTimeout(function(){pergunta[i].scrollIntoView()},2000); */
-    }
-
-    if(respostaCerta!== undefined){
-        counterAcertos+=1
-    }
-
-    if(totalPerguntas.length===counterRespostasClick){
-        setTimeout(fimDoQuiz, "2000")
-    }
-    
-   
-
-    }
-        
-    function scrolar(elemento){
-        setTimeout(scrollProxPergunta,"2000",elemento);
-    }
-
-function scrollProxPergunta(element){
-    /* let perguntas = document.querySelectorAll(".question");
-    console.log(perguntas);
-    for(let i=0;i<perguntas.length;i++){
-        let pergunta = perguntas[i].childNodes.item(3);
-        let perguntaRespondida = pergunta.classList.contains("respondido");
-        console.log(pergunta);
-        console.log(perguntaRespondida);
-        
-
-        if(perguntaRespondida && perguntas[i+1] !== undefined){
-            perguntas.nextElementSibling.scrollIntoView({behavior:"smooth"});
         }
-    } */
+    }
+    if(respostaCerta===element){
+        acertouResposta+=1;
+    }
+    console.log(qtdQuestoes.length)
+    if(questaoRespondida===qtdQuestoes.length){
+       setTimeout(fimDoQuiz, 2000) 
+      
+    }
+    scrollProxPergunta()
+}
 
-   /*  const perguntas = document.querySelectorAll(".question");
-    for(let i=0;i<perguntas.length;i++){
-        console.log(perguntas);
-        console.log(perguntas[i]);
-        if(perguntas[i].classList.contains("respondido") && perguntas[i+1] !== undefined){
+function scrollProxPergunta(){
+    const perguntas = document.querySelectorAll(".question");
+    // console.log(perguntas);
+    for(let i=0;i<perguntas.length-1;i++){
+        if(perguntas[i].lastElementChild.classList.contains("respondido")){
             perguntas[i+1].scrollIntoView({behavior:"smooth"});
-            console.log(perguntas[i+1]);
         }
-    }   */
-    const proximaQuestao = element.parentElement
-    proximaQuestao.nextElementSibling.scrollIntoView()
- 
+    }  
+}
+
+function reiniciarQuizz(){
+    setTimeout(function(){
+        window.scrollTo(0, 0);
+        tela6.classList.add("escondido");
+        let respostas = document.querySelectorAll(".resposta");
+        tela6.innerHTML = ``
+        nivelUsuario;
+        imgUsuario;
+        textoUsuario;
+        acertouResposta=0;
+        questaoRespondida=0
+        for (let i=0;i<respostas.length;i++){
+            let divRespostas = respostas[i];
+            divRespostas.parentNode.classList.remove("respondido")
+            divRespostas.setAttribute("onclick", "comportamentoRespostas(this)");
+
+            if(divRespostas.classList.contains("true")){
+                divRespostas.classList.remove("colortrue");
+            } else{
+                divRespostas.classList.remove("colorfalse");
+            }
+        
+            divRespostas.classList.remove("naoselecionado");
+        }
+    },2000);
 }
 
 function getDataApi(id){
@@ -239,25 +257,45 @@ function getDataApi(id){
 }
 
 //Fim do quizz
+let nivelUsuario;
+let imgUsuario;
+let textoUsuario;
+
 function fimDoQuiz(){
- tela6.classList.remove("escondido")
-/* tela6.innerHTML = `
+ tela6.classList.remove("escondido");
+
+
+levelUsuario.sort(function (x,y){
+return x.minValue - y.minValue
+})
+
+const calcAcertos= Math.ceil((acertouResposta/qtdQuestoes.length)*100);
+for(let i = 0; i<levelUsuario.length; i++){
+    if(calcAcertos>= levelUsuario[i].minValue){
+        nivelUsuario = levelUsuario[i].title
+        imgUsuario= levelUsuario[i].image
+        textoUsuario= levelUsuario[i].text
+    }
+   
+}
+tela6.innerHTML = `
         <div class="container_Fim">
-            <div class="top_Recado"><h3>${} de acerto: ${}</h3></div>
-            <div class="bottom_image_texto">
-                <span class="imagem"><img src="${}" alt=""></span>
-                <span class="texto_Final"><p>${}</p></span>
+            <div class="pontuacao_Box">
+                <div class="top_Recado"><h3>${calcAcertos}% de acerto: ${nivelUsuario}</h3></div>
+                <div class="bottom_image_texto">
+                    <span class="imagem"><img src="${imgUsuario}" alt=""></span>
+                    <div class="texto_Final"><h4">${textoUsuario}</h4></div>
+                </div>
+            </div>
+            <div class="botoes">
+                <button class="acessoQuiz" onclick="reiniciarQuizz()"><h5 class="branco">Reiniciar Quizz</h5></button>
+                <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
             </div>
         </div>
+`
+tela6.scrollIntoView({behavior:"smooth"})
 
-` */
-console.log(counterAcertos)
-console.log(levelUsuario)
 }
-
-// -----------------------------------------------------------------------------------
-// Abrir tela do quizz
-
 
 //InnerHTML da Tela de Info
 function abrirTelaInfo(){
@@ -372,7 +410,7 @@ function criarPerguntas(){
     } while (i<qntPergunta);
 
     document.querySelector(".telaCriarPerguntas").innerHTML += pergunta;
-    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoIrParaNiveis" onclick="objPerguntas()">Prosseguir para criar níveis</button>`
+    document.querySelector(".telaCriarPerguntas").innerHTML += `<button class="botaoGeral" onclick="objPerguntas()">Prosseguir para criar níveis</button>`
     colapsarSecao();
 }
 
@@ -520,6 +558,8 @@ function abrirTelaNiveis(){
                 <div class="nivel">
                     <button type="button" class="buttonReadMore">
                         <h4>Nivel ${i}</h4>
+                        <ion-icon class="iconeReadMore" name="create-outline" >
+                        </ion-icon>
                     </button>
                 <div class="container">
                     <input id="inputPergunta" class="tituloNivel" type="text" placeholder="Título do nível">
@@ -530,7 +570,7 @@ function abrirTelaNiveis(){
                 </div>     
                 `
 }
-    tela5.innerHTML += `<button class="botaoIrParaNiveis" onclick="finalizarNivel()">Finalizar Quizz</button>`
+    tela5.innerHTML += `<button class="botaoGeral" onclick="finalizarNivel()">Finalizar Quizz</button>`
     nodeNivel=document.querySelectorAll(".nivel")
     colapsarSecao()
 }
@@ -656,8 +696,13 @@ function enviarQuizzApi(){
 
 function quizUsuarioLocalStorage(resposta){
     let quizzId = [];
+    
     quizzId = resposta.data.id;
     console.log(quizzId);
+
+    if(listaIdsUsuario===null){ 
+        listaIdsUsuario=[]
+    }
 
     localStorage.setItem("IdUsuario", JSON.stringify(quizzId));
     getQuizUsuarioLocalStorage();
@@ -695,7 +740,7 @@ function telaSucessoQuizz(response){
                     <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
                 </div>
                 <div class="botoes">
-                    <button class="acessoQuiz" onclick="abrirTelaQuizz()"><h5 class="branco">Acessar quizz</h5></button>
+                    <button class="acessoQuiz" onclick="getDataApi(${dataQuizz.id})"><h5 class="branco">Acessar quizz</h5></button>
                     <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
                 </div>
     </div>
