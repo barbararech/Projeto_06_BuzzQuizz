@@ -798,7 +798,6 @@ margin-bottom: 40px;
         width: 375px;
        
      }
-
      .caixa-respostas{
          width: 340px;
          /* height: 413px;  */
@@ -850,14 +849,11 @@ margin-bottom: 40px;
         margin-left: 0;
     }
 
-    /* .texto_Final {
-        margin-left: 20px;
-        word-break: break-word;
-        padding: 0 10px;
-        font-weight: 700;
+    .nextTop{
+        margin-top: -3px;
+    }
+
+    .titulo_Quiz{
         font-size: 19px;
     }
-    .texto_Final h4{
-        color:#000000;
-    } */
 }
