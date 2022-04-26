@@ -87,11 +87,11 @@ h1{
     flex-direction: column;
     align-items:center;
 }
-.containerListas{
+/* .containerListas{
     display: flex;
     flex-direction: column;
     align-items:flex-start;
-}
+} */
 
 /* Seus Quizzes */
 .seusQuizzes{
@@ -112,9 +112,12 @@ h1{
     font-size: 20px;
     font-weight: 700;
     /* margin-right: 17px; */
-    margin-bottom: 0;
+    /* margin-bottom: 0; */
 }
 
+.todosOsQuizzes h3{
+    width:100%
+}
 /* h2{
     font-size: 20px;
     font-weight: 700;
@@ -128,16 +131,16 @@ h1{
     cursor: pointer;
 }
 
-
 /* Todos os Quizzes */
-.todosOsQuizzes{
+.todosOsQuizzes, .containerListas{
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     margin:0 auto;
-    max-width: 1110px;
-    overflow-x: auto;
+    width: 1100px;
+    overflow-x: hidden;
  }
 
  .coverQuiz{
@@ -155,14 +158,29 @@ h1{
      cursor: pointer;
  }
 
- .gradeQuizzes{
-     overflow-x: hidden;;
+ .lista_User, .gradeQuizzes{
+    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: repeat(3,3fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    margin-bottom: 50px;
+    width: 100%;
+} 
+/* .lista_User, .gradeQuizzes{
+overflow-x: hidden;;
      display: grid;
      gap: 10px 20px;
      margin-top: 12px; 
      grid-template-columns: 1fr 1fr 1fr;
      grid-template-rows: repeat(auto-fill, minmax(12px, 181px));
- }
+} */
+.gradeQuizzes{
+    margin-top: 12px;
+}
+ /* grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(auto-fill, minmax(12px, 181px));
+ } */
 
  span {
      display: flex;
@@ -399,19 +417,7 @@ input::placeholder{
     font-weight: 400;
     color: #fff5f4;
 }
-/* 
-cursor: pointer;
-margin-top: 85px;
-max-width: 378px;
-width: 100%;
-min-width: 300px;
-height: 54px;
-background-color: #EC362D;
-border-radius: 15px;
-border: none;
-display: flex;
-justify-content: center;
-align-items: center; */
+
 /* Tela Criar Nivel */
 .telaCriarNivel{
     margin-top: 80px;
@@ -530,13 +536,14 @@ margin-bottom: 40px;
 }
 
 /* Listagem quiz users */
-.lista_User{
+/* .lista_User{
     display: grid;
     grid-template-columns: repeat(3,3fr);
     grid-column-gap: 10px;
-   grid-row-gap: 10px;
-   margin-bottom: 50px;
-}
+    grid-row-gap: 10px;
+     margin-bottom: 50px;
+} */
+
 .home_quizz{
     position: relative;
     cursor: pointer;
@@ -574,8 +581,8 @@ margin-bottom: 40px;
 }
 
 .titulo_Quiz{
-    position: absolute;
-    top: 50%;
+  position: absolute;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -678,9 +685,9 @@ margin-bottom: 40px;
     }
 
     /* Seus quizzes */
-    .seusQuizzes{
-        width: 350px;
-        margin:69px 17px;
+     .seusQuizzes{
+        width: 340px;
+        margin:69px auto 12px auto;
         flex-wrap: wrap;
      }
 
@@ -697,11 +704,19 @@ margin-bottom: 40px;
     }
 
     .todosOsQuizzes{
-        margin: 31px 17px;
+        margin: 12px 17px 31px;
      }
     
-     .gradeQuizzes{
+     .gradeQuizzes, .lista_User{
         grid-template-columns: 1fr;
+        margin-bottom: 38px;
+     } 
+
+     .todosOsQuizzes h3{
+         width: 340px;
+     }
+     .todosOsQuizzes, .containerListas{
+        width: 340px;
      }
 
 }

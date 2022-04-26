@@ -14,7 +14,6 @@ function inicio(){
     window.location.reload(true);
 }
 
-
 let listaIdsUsuario = localStorage.getItem("listaIdsUsuarioLocalStorage");
 
 if(listaIdsUsuario === null){
@@ -24,9 +23,6 @@ if(listaIdsUsuario === null){
 } else{
     listaIdsUsuario = JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
 }
-// let stringIds = JSON.stringify(listaIdsUsuario);
-// localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
-// listaIdsUsuario.push(JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage")));
 
 //Adicionar botão de criar quizz dinamicamente
 iniciarApp()
