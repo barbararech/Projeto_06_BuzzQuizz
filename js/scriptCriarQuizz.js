@@ -140,7 +140,9 @@ function inserirQuizzUser(response){
 
 //Exibir Quizz
 let resposta;
+let respostaAPI;
 function exibirQuizz(response){
+    respostaAPI=response
     tela1.classList.add("escondido");
     tela2.classList.remove("escondido");
     conteudoHTML.classList.add("nextTop");
@@ -157,6 +159,7 @@ function exibirQuizz(response){
     <div class="render-perguntas"> </div>
     `;
     for(let i = 0 ; i<pergunta.length; i++){
+        embralharRespostas(pergunta,i)
         const renderPerguntas = tela2.querySelector(".render-perguntas")
         renderPerguntas.innerHTML +=`
         <div class="question">
@@ -165,7 +168,7 @@ function exibirQuizz(response){
             </div>
         </div>
         `
-        embralharRespostas(pergunta,i)
+       
         for(let j=0; j<resposta.length; j++){
             const respostas= document.getElementById(`pergunta${i}`)
            
@@ -178,7 +181,6 @@ function exibirQuizz(response){
         }
 
     }
-
     setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
@@ -247,7 +249,9 @@ function reiniciarQuizz(){
         
         tela6.classList.add("escondido");
         let respostas = document.querySelectorAll(".resposta");
-        tela6.innerHTML = ``
+        tela6.innerHTML = ``;
+        tela2.innerHTML= ``;
+        exibirQuizz(respostaAPI)
         nivelUsuario;
         imgUsuario;
         textoUsuario;
