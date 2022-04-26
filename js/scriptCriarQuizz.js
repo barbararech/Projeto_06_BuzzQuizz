@@ -8,6 +8,7 @@ const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
 const tela6 = document.querySelector(".telaFimDoQuizz");
+const tela7 = document.querySelector(".telaSucessoQuizz");
 const listaUser= document.querySelector(".lista_User");
 let listaIdsUsuario = [];
 let acertouResposta=0;
@@ -106,7 +107,7 @@ function listarTodosQuizzes(response){
             if(!numListaIdsUsuario.includes(quizzes[j].id)){
                 document.querySelector(".gradeQuizzes").innerHTML += ` 
                     <div id="${quizzes[j].id}" class="coverQuiz" onclick="getDataApi(${quizzes[j].id})">
-                        <span>"${quizzes[j].title}"</span>                    
+                        <span>${quizzes[j].title}</span>                    
                     </div>
                     `
             const quizzAtual = document.getElementById(quizzes[j].id);
@@ -138,6 +139,7 @@ function inserirQuizzUser(response){
 }
 
 //Exibir Quizz
+let resposta;
 function exibirQuizz(response){
     tela1.classList.add("escondido");
     tela2.classList.remove("escondido");
@@ -163,7 +165,7 @@ function exibirQuizz(response){
             </div>
         </div>
         `
-        const resposta = pergunta[i].answers.sort(arrayAleatorio);
+        embralharRespostas(pergunta,i)
         for(let j=0; j<resposta.length; j++){
             const respostas= document.getElementById(`pergunta${i}`)
            
@@ -177,6 +179,10 @@ function exibirQuizz(response){
 
     }
     setTimeout(scrollPrimeiraPergunta(),2000);
+}
+
+function embralharRespostas(pergunta,indice){
+resposta = pergunta[indice].answers.sort(arrayAleatorio);
 }
 
 function arrayAleatorio() {
@@ -237,6 +243,7 @@ function scrollProxPergunta(){
 function reiniciarQuizz(){
     setTimeout(function(){
         window.scrollTo(0, 0);
+        
         tela6.classList.add("escondido");
         let respostas = document.querySelectorAll(".resposta");
         tela6.innerHTML = ``
@@ -661,7 +668,7 @@ function finalizarNivel(){
 
 //Envio do Quiz Para API
 function enviarQuizzApi(){
-    const objQuizz = {
+    let objQuizz = {
             title: informacoesBasicas.titulo,
             image: informacoesBasicas.imagem,
             questions: [],
@@ -701,7 +708,9 @@ function enviarQuizzApi(){
     console.log(JSON.stringify(objQuizz))
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes", objQuizz);
     promise.then(quizUsuarioLocalStorage)
-    promise.catch(function(){alert('Erro')});
+    promise.catch(function(){
+
+        alert('Erro')});
 }
 
 function quizUsuarioLocalStorage(resposta){
@@ -739,8 +748,9 @@ function pedirQuizzData(){
 
 function telaSucessoQuizz(response){
     const dataQuizz=response.data;
-    conteudoHTML.innerHTML=`
-    <div class="telaSucessoQuizz">
+    tela5.classList.add("escondido");
+    tela7.classList.remove("escondido");
+    tela7.innerHTML+=`
                 <div class="titulo"> 
                     <h3>Seu quizz está pronto!</h3> 
                 </div>
@@ -750,12 +760,15 @@ function telaSucessoQuizz(response){
                     <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
                 </div>
                 <div class="botoes">
-                    <button class="acessoQuiz" onclick="getDataApi(${dataQuizz.id})"><h5 class="branco">Acessar quizz</h5></button>
+                    <button class="acessoQuiz" onclick="acessarQuizz(${dataQuizz.id})"><h5 class="branco">Acessar quizz</h5></button>
                     <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
                 </div>
-    </div>
     `
     alert("Deu boa");
 }
 
 
+function acessarQuizz(id){
+    tela7.classList.add("escondido")
+    getDataApi(id)
+}

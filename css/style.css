@@ -550,6 +550,7 @@ margin-bottom: 40px;
 .lista_User img {
     height: 180px;
     width: 340px;
+    object-fit: cover;
     border-radius: 5px;
 }
 
