@@ -176,6 +176,7 @@ function exibirQuizz(response){
         }
 
     }
+
     setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
@@ -236,7 +237,6 @@ function scrollProxPergunta(){
 
 function reiniciarQuizz(){
     setTimeout(function(){
-        exibirQuizz();
         window.scrollTo(0, 0);
         tela6.classList.add("escondido");
         let respostas = document.querySelectorAll(".resposta");
