@@ -320,7 +320,7 @@ h5{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 38px;
+    margin-top: 63px;
     margin-bottom: 30px;
 
 }
@@ -728,9 +728,11 @@ margin-bottom: 40px;
     margin-left: 20px;
     word-break: break-word;
     padding: 0 10px;
+    font-weight: 700;
+    font-size: 19px;
 }
 .texto_Final h4{
-    color:#000000
+    color:#000000;
 }
 
 /* Classe escondido */
@@ -789,14 +791,17 @@ margin-bottom: 40px;
      .todosOsQuizzes, .containerListas{
         width: 340px;
      }
+    
+     .telaCriarPerguntas > h3{
+        margin-top: 38px;
+     }
      .question{
         width: 375px;
        
      }
-
      .caixa-respostas{
          width: 340px;
-         height: 413px;
+         /* height: 413px;  */
          padding-bottom: 20px;
      }
 
@@ -814,5 +819,42 @@ margin-bottom: 40px;
      }
      .caixa-pergunta h3{
        font-size: 19px;
+    }
+    .pontuacao_Box{
+        height: auto;
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .top_Recado{
+        width: 100%;
+    }
+
+    .bottom_image_texto{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .telaFimDoQuizz .imagem img{
+        width: 360px;
+        margin: 9px 0;
+    }
+
+    .texto_Final{
+        width: 360px;
+        white-space:pre-wrap;
+        word-break:break-all;
+         text-align:start;
+        margin-left: 0;
+    }
+
+    .nextTop{
+        margin-top: -3px;
+    }
+
+    .titulo_Quiz{
+        font-size: 19px;
     }
 }

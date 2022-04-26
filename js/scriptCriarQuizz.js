@@ -178,6 +178,7 @@ function exibirQuizz(response){
         }
 
     }
+
     setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
