@@ -9,19 +9,32 @@ const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
 const listaUser= document.querySelector(".lista_User");
-let listaIdsUsuario = [];
 
 function inicio(){
     window.location.reload(true);
 }
 
+
+let listaIdsUsuario = localStorage.getItem("listaIdsUsuarioLocalStorage");
+
+if(listaIdsUsuario === null){
+    listaIdsUsuario = [];
+    let stringIds = JSON.stringify(listaIdsUsuario);
+    localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
+} else{
+    listaIdsUsuario = JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
+}
+// let stringIds = JSON.stringify(listaIdsUsuario);
+// localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
+// listaIdsUsuario.push(JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage")));
+
 //Adicionar botão de criar quizz dinamicamente
 iniciarApp()
 function iniciarApp(){
     tela1.classList.remove("escondido");
-   listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
-    // console.log(listaIdsUsuario)
-    if (!listaIdsUsuario){
+    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
+    console.log(listaIdsUsuario)
+    if (!listaIdsUsuario || listaIdsUsuario.length === 0){
         document.querySelector(".telaListaQuizzes").innerHTML += `
             <div class="criarQuizz">
                 <div class="infoSemQuizz">Você não criou nenhum quizz ainda :(</div>
@@ -657,7 +670,7 @@ function getQuizUsuarioLocalStorage(){
 
     let stringIds = JSON.stringify(listaIdsUsuario);
     localStorage.setItem("listaIdsUsuarioLocalStorage", stringIds);
-    listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
+    // listaIdsUsuario =  JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
     console.log(listaIdsUsuario);
     pedirQuizzData()
 }
