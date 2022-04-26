@@ -90,7 +90,7 @@ h1{
 /* .containerListas{
     display: flex;
     flex-direction: column;
-    align-items:flex-start;
+    align-items:center;
 } */
 
 /* Seus Quizzes */
@@ -445,11 +445,6 @@ input::placeholder{
     width: 100%;
 }
 
-/* Classe escondido */
-.escondido{
-    display:none
-}
-
 /*Tela de Sucesso*/
 
 h2{
@@ -585,9 +580,11 @@ margin-bottom: 40px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
 }
 .titulo_Quiz h2{
     font-size: 39px;
+    line-height: 40px;
 }
 
 .nextTop{
@@ -604,29 +601,36 @@ margin-bottom: 40px;
     align-items: center;
 }
 .question{
+    background-color: white;
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.205);
     max-width: 760px;
     width:100%;
     min-width: 400px;
     height: fit-content;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 20px;
-    margin-bottom: 42px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   padding-top: 20px;
+   padding-bottom: 20px;
+    margin-bottom: 70px;
 }
 
 .caixa-pergunta{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 688px;
+    max-width: 688px;
+    width: 100%;
     height: 138px;
     margin-bottom: 20px;
 }
 .caixa-pergunta h3{
     color: #ffffff;
     mix-blend-mode: difference;
+    width: fit-content;
+    word-break: break-word;
+    padding: 0 20px;
 }
 
 /* caixa de resposta */
@@ -650,7 +654,7 @@ margin-bottom: 40px;
     /* height: 100%; */
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(auto-fill, minmax(230px, auto));
+    grid-template-rows: repeat(auto-fill, minmax(150px, auto));
     row-gap: 10px;
     column-gap: 10px;
     margin-bottom: 0px;
@@ -661,11 +665,79 @@ margin-bottom: 40px;
     height: 175px;
 }
 .resposta h4{
-    width: 330px;
+    max-width: 330px;
+    width: 100%;
     word-break: break-word;
     margin-top: 10px;
 }
 
+/* Tela fi do quizz */
+.telaFimDoQuizz{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container_Fim{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.pontuacao_Box{
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.205);
+    height: 430px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+}
+.telaFimDoQuizz span{
+    position: relative;
+    bottom: 0;
+    left: 0;
+}
+.telaFimDoQuizz .imagem img{
+    object-fit: cover;
+    width: 364px;
+    height: 273px;
+}
+.top_Recado{
+    width: 727px;
+    height: 99px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EC362D;
+    word-break: break-word;
+    padding: 0 10px;
+}
+
+.top_Recado h3{
+    color: white;
+}
+
+.bottom_image_texto{
+    width: 727px;
+    display:flex
+}
+.texto_Final {
+    margin-left: 20px;
+    word-break: break-word;
+    padding: 0 10px;
+    font-weight: 700;
+    font-size: 19px;
+}
+.texto_Final h4{
+    color:#000000;
+}
+
+/* Classe escondido */
+.escondido{
+    display:none
+}
 /* Versão Mobile */
 @media (max-width:1100px){
 
@@ -722,4 +794,70 @@ margin-bottom: 40px;
      .telaCriarPerguntas > h3{
         margin-top: 38px;
      }
+     .question{
+        width: 375px;
+       
+     }
+
+     .caixa-respostas{
+         width: 340px;
+         /* height: 413px;  */
+         padding-bottom: 20px;
+     }
+
+     .caixa-respostas h4{
+         font-size: 13px;
+     }
+
+     .resposta img{
+         width: 163px;
+         height: 113px;
+     }
+     .caixa-pergunta{
+         width: 348px;
+         height: 89px;
+     }
+     .caixa-pergunta h3{
+       font-size: 19px;
+    }
+    .pontuacao_Box{
+        height: auto;
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .top_Recado{
+        width: 100%;
+    }
+
+    .bottom_image_texto{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .telaFimDoQuizz .imagem img{
+        width: 360px;
+        margin: 9px 0;
+    }
+
+    .texto_Final{
+        width: 360px;
+        white-space:pre-wrap;
+        word-break:break-all;
+         text-align:start;
+        margin-left: 0;
+    }
+
+    /* .texto_Final {
+        margin-left: 20px;
+        word-break: break-word;
+        padding: 0 10px;
+        font-weight: 700;
+        font-size: 19px;
+    }
+    .texto_Final h4{
+        color:#000000;
+    } */
 }

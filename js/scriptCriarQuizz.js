@@ -2,17 +2,24 @@
 //Variáveis Globais
 //  let seusQuizzes=[1]; //Adicionei uma array aleatória para testar o botão de criar quizz - Arrumar
 const conteudoHTML= document.querySelector(".conteudo") // criei pra ficar limpando o html ao inves de ligar de desligar o "escondido"
-
 const tela1 = document.querySelector(".telaListaQuizzes");
 const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
+const tela6 = document.querySelector(".telaFimDoQuizz");
 const listaUser= document.querySelector(".lista_User");
+let listaIdsUsuario = [];
+let acertouResposta=0;
+let questaoRespondida=0;
+let levelUsuario;
+function comparador() { 
+	return Math.random() - 0.5; 
+}
 
 function inicio(){
     window.location.reload(true);
-}
+
 
 let listaIdsUsuario = localStorage.getItem("listaIdsUsuarioLocalStorage");
 
@@ -23,7 +30,7 @@ if(listaIdsUsuario === null){
 } else{
     listaIdsUsuario = JSON.parse(localStorage.getItem("listaIdsUsuarioLocalStorage"));
 }
-
+}
 //Adicionar botão de criar quizz dinamicamente
 iniciarApp()
 function iniciarApp(){
@@ -135,6 +142,7 @@ function exibirQuizz(response){
     tela1.classList.add("escondido");
     tela2.classList.remove("escondido");
     conteudoHTML.classList.add("nextTop");
+    levelUsuario = response.data.levels
     const dataQuizz= response.data;
     const pergunta = dataQuizz.questions;
     
@@ -151,15 +159,14 @@ function exibirQuizz(response){
         renderPerguntas.innerHTML +=`
         <div class="question">
             <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3> </div>
-            <div class="caixa-respostas" id="pergunta${i}">
-                
+            <div class="caixa-respostas" id="pergunta${i}">     
             </div>
         </div>
         `
         const resposta = pergunta[i].answers.sort(arrayAleatorio);
         for(let j=0; j<resposta.length; j++){
             const respostas= document.getElementById(`pergunta${i}`)
-            
+           
             respostas.innerHTML += `
             <div class="resposta ${resposta[j].isCorrectAnswer}" onclick="comportamentoRespostas(this)" > 
                 <img src="${resposta[j].image}"/>
@@ -169,10 +176,6 @@ function exibirQuizz(response){
         }
 
     }
-    tela2.innerHTML += ` <div class="botoes">
-    <button class="acessoQuiz" onclick="reiniciarQuizz()"><h5 class="branco">Reiniciar Quizz</h5></button>
-    <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
-    </div>`
     setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
@@ -185,10 +188,15 @@ function scrollPrimeiraPergunta() {
 }
 
 // Comportamento respostas
+let qtdQuestoes;
 function comportamentoRespostas(element){
     let respostas = element.parentNode.querySelectorAll(".resposta");
-    // console.log(respostas);
-
+    const respostaCerta = element.parentElement.querySelector(".true")
+    qtdQuestoes= document.querySelectorAll(".question");
+    questaoRespondida+=1
+    console.log(respostaCerta);
+    console.log(element);
+    
     for (let i=0;i<respostas.length;i++){
         let divRespostas = respostas[i];
         divRespostas.parentNode.classList.add("respondido")
@@ -196,6 +204,7 @@ function comportamentoRespostas(element){
 
         if(divRespostas.classList.contains("true")){
             divRespostas.classList.add("colortrue");
+            
         } else{
             divRespostas.classList.add("colorfalse");
         }
@@ -204,8 +213,15 @@ function comportamentoRespostas(element){
             divRespostas.classList.add("naoselecionado");
         }
     }
-        
-    setTimeout(scrollProxPergunta,2000);
+    if(respostaCerta===element){
+        acertouResposta+=1;
+    }
+    console.log(qtdQuestoes.length)
+    if(questaoRespondida===qtdQuestoes.length){
+       setTimeout(fimDoQuiz, 2000) 
+      
+    }
+    scrollProxPergunta()
 }
 
 function scrollProxPergunta(){
@@ -221,9 +237,14 @@ function scrollProxPergunta(){
 function reiniciarQuizz(){
     setTimeout(function(){
         window.scrollTo(0, 0);
-
+        tela6.classList.add("escondido");
         let respostas = document.querySelectorAll(".resposta");
-
+        tela6.innerHTML = ``
+        nivelUsuario;
+        imgUsuario;
+        textoUsuario;
+        acertouResposta=0;
+        questaoRespondida=0
         for (let i=0;i<respostas.length;i++){
             let divRespostas = respostas[i];
             divRespostas.parentNode.classList.remove("respondido")
@@ -245,11 +266,45 @@ function getDataApi(id){
     promise.then(exibirQuizz);
 }
 
-// -----------------------------------------------------------------------------------
-// Abrir tela do quizz
-function abrirTelaQuizz(){
-    tela1.classList.add("escondido");
-    tela2.classList.remove("escondido");
+//Fim do quizz
+let nivelUsuario;
+let imgUsuario;
+let textoUsuario;
+
+function fimDoQuiz(){
+ tela6.classList.remove("escondido");
+
+
+levelUsuario.sort(function (x,y){
+return x.minValue - y.minValue
+})
+
+const calcAcertos= Math.ceil((acertouResposta/qtdQuestoes.length)*100);
+for(let i = 0; i<levelUsuario.length; i++){
+    if(calcAcertos>= levelUsuario[i].minValue){
+        nivelUsuario = levelUsuario[i].title
+        imgUsuario= levelUsuario[i].image
+        textoUsuario= levelUsuario[i].text
+    }
+   
+}
+tela6.innerHTML = `
+        <div class="container_Fim">
+            <div class="pontuacao_Box">
+                <div class="top_Recado"><h3>${calcAcertos}% de acerto: ${nivelUsuario}</h3></div>
+                <div class="bottom_image_texto">
+                    <span class="imagem"><img src="${imgUsuario}" alt=""></span>
+                    <div class="texto_Final"><h4">${textoUsuario}</h4></div>
+                </div>
+            </div>
+            <div class="botoes">
+                <button class="acessoQuiz" onclick="reiniciarQuizz()"><h5 class="branco">Reiniciar Quizz</h5></button>
+                <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
+            </div>
+        </div>
+`
+tela6.scrollIntoView({behavior:"smooth"})
+
 }
 
 //InnerHTML da Tela de Info
@@ -651,8 +706,13 @@ function enviarQuizzApi(){
 
 function quizUsuarioLocalStorage(resposta){
     let quizzId = [];
+    
     quizzId = resposta.data.id;
     console.log(quizzId);
+
+    if(listaIdsUsuario===null){ 
+        listaIdsUsuario=[]
+    }
 
     localStorage.setItem("IdUsuario", JSON.stringify(quizzId));
     getQuizUsuarioLocalStorage();
@@ -690,7 +750,7 @@ function telaSucessoQuizz(response){
                     <div class="nome_Quizz"><h2> ${dataQuizz.title} </h2></div>
                 </div>
                 <div class="botoes">
-                    <button class="acessoQuiz" onclick="abrirTelaQuizz()"><h5 class="branco">Acessar quizz</h5></button>
+                    <button class="acessoQuiz" onclick="getDataApi(${dataQuizz.id})"><h5 class="branco">Acessar quizz</h5></button>
                     <button class="botao_Sem_Fundo" onclick="inicio()"><h5 class="cinza">Voltar para home</h5></button>
                 </div>
     </div>
