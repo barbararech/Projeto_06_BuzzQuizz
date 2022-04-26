@@ -90,7 +90,7 @@ h1{
 .containerListas{
     display: flex;
     flex-direction: column;
-    align-items:flex-start;
+    align-items:center;
 }
 
 /* Seus Quizzes */
@@ -562,9 +562,11 @@ margin-bottom: 40px;
     top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
 }
 .titulo_Quiz h2{
     font-size: 39px;
+    line-height: 40px;
 }
 
 .nextTop{
@@ -581,6 +583,7 @@ margin-bottom: 40px;
     align-items: center;
 }
 .question{
+    background-color: white;
     max-width: 760px;
     width:100%;
     min-width: 400px;
@@ -591,24 +594,43 @@ margin-bottom: 40px;
    align-items: center;
    padding-top: 20px;
     margin-bottom: 70px;
+    border: 1px solid blue;
 }
 .caixa-pergunta{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 688px;
+    max-width: 688px;
+    width: 100%;
     height: 138px;
     margin-bottom: 20px;
 }
 .caixa-pergunta h3{
     color: #ffffff;
     mix-blend-mode: difference;
+    width: fit-content;
+    word-break: break-word;
+    padding: 0 20px;
 }
 
 
 
 
 /* caixa de resposta */
+
+.resposta{
+    cursor: pointer;
+}
+.resposta.colortrue{
+    color:green;
+}
+.resposta.colorfalse{
+    color:red;
+}
+
+.naoselecionado{
+    filter: opacity(50%);
+}
 
 .caixa-respostas{
     width: 688px;
@@ -617,7 +639,6 @@ margin-bottom: 40px;
     grid-template: repeat(2, 1fr) / repeat(2, 1fr);
     row-gap: 10px;
     column-gap: 10px;
-    margin-bottom: 50px;
 }
 
 .resposta img{
@@ -625,7 +646,8 @@ margin-bottom: 40px;
     height: 175px;
 }
 .resposta h4{
-    width: 330px;
+    max-width: 330px;
+    width: 100%;
     word-break: break-word;
     margin-top: 10px;
 }
@@ -671,8 +693,33 @@ margin-bottom: 40px;
         margin: 31px 17px;
      }
     
-     .gradeQuizzes{
+     .lista_User,.gradeQuizzes{
         grid-template-columns: 1fr;
      }
+     .question{
+        width: 375px;
+       
+     }
 
+     .caixa-respostas{
+         width: 340px;
+         height: 413px;
+         padding-bottom: 20px;
+     }
+
+     .caixa-respostas h4{
+         font-size: 13px;
+     }
+
+     .resposta img{
+         width: 163px;
+         height: 113px;
+     }
+     .caixa-pergunta{
+         width: 348px;
+         height: 89px;
+     }
+     .caixa-pergunta h3{
+       font-size: 19px;
+    }
 }

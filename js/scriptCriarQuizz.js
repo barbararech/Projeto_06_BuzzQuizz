@@ -7,9 +7,11 @@ const tela2 = document.querySelector(".telaQuizz");
 const tela3 = document.querySelector(".telaInfoQuiz");
 const tela4 = document.querySelector(".telaCriarPerguntas");
 const tela5 = document.querySelector(".telaCriarNivel");
+const tela6 = document.querySelector(".telaFimDoQuizz")
 const listaUser= document.querySelector(".lista_User");
 let listaIdsUsuario = [];
-
+let counterRespostasClick=0;
+let levelUsuario;
 function comparador() { 
 	return Math.random() - 0.5; 
 }
@@ -115,6 +117,7 @@ function exibirQuizz(response){
     tela1.classList.add("escondido");
     tela2.classList.remove("escondido");
     conteudoHTML.classList.add("nextTop");
+    levelUsuario = response.data.levels
     const dataQuizz= response.data;
     const pergunta = dataQuizz.questions;
     
@@ -131,18 +134,16 @@ function exibirQuizz(response){
         renderPerguntas.innerHTML +=`
         <div class="question">
             <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3> </div>
-            <div class="caixa-respostas" id="pergunta${i}">
-                
+            <div class="caixa-respostas" id="pergunta${i}">     
             </div>
         </div>
         `
-        const resposta = pergunta[i].answers;
-        resposta.sort(comparador);
+        const resposta = pergunta[i].answers.sort(arrayAleatorio);
         for(let j=0; j<resposta.length; j++){
             const respostas= document.getElementById(`pergunta${i}`)
            
             respostas.innerHTML += `
-            <div class="resposta" > 
+            <div class="resposta ${resposta[j].isCorrectAnswer}" onclick="comportamentoRespostas(this)" > 
                 <img src="${resposta[j].image}"/>
                 <h4> ${resposta[j].text}</h4>
             </div>
@@ -151,17 +152,65 @@ function exibirQuizz(response){
     }
 }
 
+function arrayAleatorio() {
+    return (Math.random() - 0.5);
+}
+
+// Comportamento respostas
+function comportamentoRespostas(element){
+    let respostas = element.parentNode.querySelectorAll(".resposta");
+    const totalPerguntas = document.querySelectorAll(".question")
+    counterRespostasClick+=1;
+    for (let i=0;i<respostas.length;i++){
+        let divRespostas = respostas[i];
+        respostas[i].removeAttribute("onclick");
+        console.log(divRespostas);
+
+        if(divRespostas.classList.contains("true")){
+            divRespostas.classList.add("colortrue");
+            // console.log(divRespostas);
+        } else{
+            divRespostas.classList.add("colorfalse");
+        }
+
+        if(element !== divRespostas){
+            divRespostas.classList.add("naoselecionado");
+        }
+        
+        /* console.log(pergunta[i])
+        setTimeout(function(){pergunta[i].scrollIntoView()},2000); */
+    }
+
+    if(totalPerguntas.length===counterRespostasClick){
+        setTimeout(fimDoQuiz, "2000")
+    }
+    
+}
+
 function getDataApi(id){
     let promise = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`);
     promise.then(exibirQuizz);
 }
 
+//Fim do quizz
+function fimDoQuiz(){
+ tela6.classList.remove("escondido")
+/* tela6.innerHTML = `
+        <div class="container_Fim">
+            <div class="top_Recado"><h3>${} de acerto: ${}</h3></div>
+            <div class="bottom_image_texto">
+                <span class="imagem"><img src="${}" alt=""></span>
+                <span class="texto_Final"><p>${}</p></span>
+            </div>
+        </div>
+
+` */
+console.log(levelUsuario)
+}
+
 // -----------------------------------------------------------------------------------
 // Abrir tela do quizz
-function abrirTelaQuizz(){
-    tela1.classList.add("escondido");
-    tela2.classList.remove("escondido");
-}
+
 
 //InnerHTML da Tela de Info
 function abrirTelaInfo(){
