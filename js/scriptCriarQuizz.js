@@ -145,34 +145,70 @@ function exibirQuizz(response){
             `
             }
     }
+    setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
 function arrayAleatorio() {
     return (Math.random() - 0.5);
 }
 
+function scrollPrimeiraPergunta() {
+    document.querySelectorAll(".question")[0].scrollIntoView({behavior:"smooth"});
+}
+
 // Comportamento respostas
 function comportamentoRespostas(element){
     let respostas = element.parentNode.querySelectorAll(".resposta");
+    // console.log(respostas);
 
     for (let i=0;i<respostas.length;i++){
         let divRespostas = respostas[i];
+        divRespostas.parentNode.classList.add("respondido")
         respostas[i].removeAttribute("onclick");
-        console.log(divRespostas);
 
         if(divRespostas.classList.contains("true")){
             divRespostas.classList.add("colortrue");
+            // console.log(divRespostas.parentNode)
             // console.log(divRespostas);
         } else{
             divRespostas.classList.add("colorfalse");
         }
-
+    
         if(element !== divRespostas){
             divRespostas.classList.add("naoselecionado");
         }
 
-        // setTimeout(function(){pergunta[i].scrollIntoView()},2000);
+       
     }
+        
+    setTimeout(scrollProxPergunta,2000);
+}
+
+function scrollProxPergunta(){
+    let perguntas = document.querySelectorAll(".question");
+    console.log(perguntas);
+    for(let i=0;i<perguntas.length;i++){
+        let pergunta = perguntas[i].childNodes.item(3);
+        let perguntaRespondida = pergunta.classList.contains("respondido");
+        console.log(pergunta);
+        console.log(perguntaRespondida);
+        
+
+        if(perguntaRespondida && perguntas[i+1] !== undefined){
+            perguntas.nextElementSibling.scrollIntoView({behavior:"smooth"});
+        }
+    }
+
+    // const perguntas = document.querySelectorAll(".question");
+    // for(let i=0;i<perguntas.length;i++){
+    //     console.log(perguntas);
+    //     console.log(perguntas[i]);
+    //     if(perguntas[i].classList.contains("respondido") && perguntas[i+1] !== undefined){
+    //         perguntas[i+1].scrollIntoView({behavior:"smooth"});
+    //         console.log(perguntas[i+1]);
+    //     }
+    // }  
+ 
 }
 
 function getDataApi(id){
