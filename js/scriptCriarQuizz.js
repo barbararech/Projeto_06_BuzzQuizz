@@ -11,6 +11,7 @@ const tela6 = document.querySelector(".telaFimDoQuizz")
 const listaUser= document.querySelector(".lista_User");
 let listaIdsUsuario = [];
 let counterRespostasClick=0;
+let counterAcertos=0;
 let levelUsuario;
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -134,7 +135,7 @@ function exibirQuizz(response){
         renderPerguntas.innerHTML +=`
         <div class="question">
             <div class="caixa-pergunta" style="background-color:${pergunta[i].color}"> <h3>${pergunta[i].title}</h3> </div>
-            <div class="caixa-respostas" id="pergunta${i}">     
+            <div class="caixa-respostas" id="pergunta${i}" onclick="scrolar(this)" >     
             </div>
         </div>
         `
@@ -150,41 +151,86 @@ function exibirQuizz(response){
             `
             }
     }
+    setTimeout(scrollPrimeiraPergunta(),2000);
 }
 
 function arrayAleatorio() {
     return (Math.random() - 0.5);
 }
 
+function scrollPrimeiraPergunta() {
+    document.querySelectorAll(".question")[0].scrollIntoView({behavior:"smooth"});
+}
+
 // Comportamento respostas
 function comportamentoRespostas(element){
     let respostas = element.parentNode.querySelectorAll(".resposta");
     const totalPerguntas = document.querySelectorAll(".question")
+    const respostaCerta = element.querySelector(".true")
     counterRespostasClick+=1;
     for (let i=0;i<respostas.length;i++){
         let divRespostas = respostas[i];
+        divRespostas.parentNode.classList.add("respondido")
         respostas[i].removeAttribute("onclick");
-        console.log(divRespostas);
 
         if(divRespostas.classList.contains("true")){
             divRespostas.classList.add("colortrue");
+            // console.log(divRespostas.parentNode)
             // console.log(divRespostas);
         } else{
             divRespostas.classList.add("colorfalse");
         }
-
+    
         if(element !== divRespostas){
             divRespostas.classList.add("naoselecionado");
-        }
-        
+        }       
         /* console.log(pergunta[i])
         setTimeout(function(){pergunta[i].scrollIntoView()},2000); */
+    }
+
+    if(respostaCerta!== undefined){
+        counterAcertos+=1
     }
 
     if(totalPerguntas.length===counterRespostasClick){
         setTimeout(fimDoQuiz, "2000")
     }
     
+   
+
+    }
+        
+    function scrolar(elemento){
+        setTimeout(scrollProxPergunta,"2000",elemento);
+    }
+
+function scrollProxPergunta(element){
+    /* let perguntas = document.querySelectorAll(".question");
+    console.log(perguntas);
+    for(let i=0;i<perguntas.length;i++){
+        let pergunta = perguntas[i].childNodes.item(3);
+        let perguntaRespondida = pergunta.classList.contains("respondido");
+        console.log(pergunta);
+        console.log(perguntaRespondida);
+        
+
+        if(perguntaRespondida && perguntas[i+1] !== undefined){
+            perguntas.nextElementSibling.scrollIntoView({behavior:"smooth"});
+        }
+    } */
+
+   /*  const perguntas = document.querySelectorAll(".question");
+    for(let i=0;i<perguntas.length;i++){
+        console.log(perguntas);
+        console.log(perguntas[i]);
+        if(perguntas[i].classList.contains("respondido") && perguntas[i+1] !== undefined){
+            perguntas[i+1].scrollIntoView({behavior:"smooth"});
+            console.log(perguntas[i+1]);
+        }
+    }   */
+    const proximaQuestao = element.parentElement
+    proximaQuestao.nextElementSibling.scrollIntoView()
+ 
 }
 
 function getDataApi(id){
@@ -205,6 +251,7 @@ function fimDoQuiz(){
         </div>
 
 ` */
+console.log(counterAcertos)
 console.log(levelUsuario)
 }
 
